@@ -53,7 +53,7 @@ class PlayerInitialization extends Signal {
             return queue.metadata.channel.send({ embeds: [embed] });
         });
 
-        player.events.on('debug', (queue, message) => console.log(`[DEBUG ${queue.guild.id}] ${message}`));
+        //player.events.on('debug', (queue, message) => console.log(`[DEBUG ${queue.guild.id}] ${message}`));
     }
 }
 

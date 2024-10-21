@@ -1,4 +1,4 @@
-import { HooksRegistry, Symbols } from './Registry';
+import { HooksRegistry, Symbols } from "./Registry";
 
 function DatabaseHook() {
   const mongoose = HooksRegistry.get(Symbols.Database);

@@ -4,13 +4,14 @@ const ClientIntents = [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates,
 ];
 
 const EmbedColor = {
     Success: 0x00fa9a,
     Error: 0xff2a16,
     Warning: 0xffd700,
-    Info: 0x00bfaf,
+    Info: 0x0099FF,
 };
 
 export { ClientIntents, EmbedColor }
