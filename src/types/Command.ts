@@ -19,4 +19,4 @@ abstract class Command implements CommandInterface {
     }
 }
 
-export default Command;
+export { CommandInterface, Command };

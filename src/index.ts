@@ -4,8 +4,8 @@ import GetFiles from './utils/GetFiles';
 import path from 'path';
 import dotenv from 'dotenv';
 
-import Command from './types/Command';
-import Signal from './types/Signal';
+import { Command } from './types/Command';
+import { Signal } from './types/Signal';
 
 import { ConnectDatabase, CloseDatabase } from './database/Connection';
 

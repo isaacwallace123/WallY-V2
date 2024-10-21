@@ -5,7 +5,7 @@ interface SignalData {
     once?: boolean;
 }
 
-abstract class SignalInterface {
+abstract class Signal {
     public data: SignalData;
 
     constructor(data: SignalData) {
@@ -19,4 +19,4 @@ abstract class SignalInterface {
     }
 }
 
-export default SignalInterface;
+export { SignalData, Signal };

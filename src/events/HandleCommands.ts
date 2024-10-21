@@ -1,9 +1,8 @@
 import { Events, ChatInputCommandInteraction } from 'discord.js';
 
-import Command from '../types/Command';
-
-import Signal from '../types/Signal';
-import Client from '../types/Client';
+import { Command } from '../types/Command';
+import { Signal } from '../types/Signal';
+import { Client } from '../types/Client';
 
 class HandleCommands extends Signal {
     constructor() {

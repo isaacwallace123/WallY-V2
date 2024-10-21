@@ -1,7 +1,7 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 
-import Command from '../types/Command';
-import Client from '../types/Client';
+import { Command } from '../../types/Command';
+import { Client } from '../../types/Client';
 
 class PingCommand extends Command {
     constructor() {

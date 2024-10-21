@@ -1,8 +1,8 @@
 import { Events } from "discord.js";
 import { Routes } from 'discord-api-types/v9';
 
-import Signal from '../types/Signal';
-import Client from '../types/Client';
+import { Signal } from "../types/Signal";
+import { Client } from "../types/Client";
 
 class InitializeApplicationCommands extends Signal {
     constructor() {

@@ -6,6 +6,8 @@ interface ServerInterface {
     bank: number;
 }
 
+type ServerDocument = Document & ServerInterface;
+
 class Server extends Document implements ServerInterface {
     id: string;
     bank: number;
@@ -17,7 +19,7 @@ class Server extends Document implements ServerInterface {
         this.bank = 0;
     }
 
-    async getServerData(): Promise<ServerInterface & Document> {
+    async getServerData(): Promise<ServerDocument> {
         let serverData = await ServerModel.findOne({ id: this.id });
 
         if (!serverData) {

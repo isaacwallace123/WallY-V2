@@ -5,4 +5,4 @@ interface GuildInterface {
     daily: Date,
 }
 
-export default GuildInterface;
+export { GuildInterface };

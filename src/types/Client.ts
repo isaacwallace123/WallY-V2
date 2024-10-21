@@ -1,7 +1,7 @@
 import { Client as DiscordClient, Collection } from 'discord.js';
 
-import Command from './Command';
-import Signal from './Signal';
+import { Command } from './Command';
+import { Signal } from './Signal';
 
 class Client extends DiscordClient {
     public commands: Collection<string, Command>;
@@ -30,4 +30,4 @@ class Client extends DiscordClient {
     }
 }
 
-export default Client;
+export { Client };
