@@ -1,4 +1,4 @@
-import { connect } from "mongoose";
+import { connect, connection } from "mongoose";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -22,4 +22,15 @@ const ConnectDatabase = async () => {
     }
 };
 
-export { ConnectDatabase };
+const CloseDatabase = async () => {
+    try {
+        await connection.close();
+
+        console.log('MongoDB disconnected successfully.');
+    } catch (error) {
+        console.error('Error closing MongoDB:', error);
+        process.exit(1);
+    }
+}
+
+export { ConnectDatabase, CloseDatabase };

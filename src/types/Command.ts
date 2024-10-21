@@ -1,7 +1,11 @@
 import { CommandData } from 'commandkit';
 import { ChatInputCommandInteraction, Client } from 'discord.js';
 
-abstract class Command {
+interface CommandInterface {
+    data: CommandData;
+}
+
+abstract class Command implements CommandInterface {
     public data: CommandData;
 
     constructor(data: CommandData) {

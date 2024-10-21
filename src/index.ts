@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import Command from './types/Command';
 import Signal from './types/Signal';
 
-import { ConnectDatabase } from './database/connection';
+import { ConnectDatabase, CloseDatabase } from './database/Connection';
 
 dotenv.config();
 
@@ -39,3 +39,25 @@ const main = async () => {
 };
 
 main().catch(err => console.error(err));
+
+process.on('SIGINT', async () => {
+    try {
+        await client.destroy();
+        await CloseDatabase();
+    } catch(error) {
+        console.error('Error during shutdown:', error);
+    } finally {
+        process.exit(0);
+    }
+});
+
+process.on('SIGTERM', async () => {
+    try {
+        await client.destroy();
+        await CloseDatabase();
+    } catch(error) {
+        console.error('Error during shutdown:', error);
+    } finally {
+        process.exit(0);
+    }
+});
