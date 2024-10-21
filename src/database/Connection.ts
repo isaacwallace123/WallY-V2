@@ -1,4 +1,6 @@
 import { connect, connection } from "mongoose";
+import { HooksRegistry, Symbols } from "../hooks/Registry";
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,9 +15,11 @@ const DBURI = `mongodb://${DBUser}:${DBPassword}@${DBHost}:${DBPort}/${DBCollect
 
 const ConnectDatabase = async () => {
     try {
-        await connect(DBURI, {});
+        const DB = await connect(DBURI, {});
 
         console.log('MongoDB connected successfully.');
+
+        HooksRegistry.set(Symbols.Database, DB);
     } catch (error) {
         console.error('Error connecting to MongoDB:', error);
         process.exit(1);

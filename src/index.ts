@@ -1,4 +1,4 @@
-import client from './components/client';
+import client from './components/DiscordClient';
 
 import GetFiles from './utils/GetFiles';
 import path from 'path';

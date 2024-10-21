@@ -12,7 +12,7 @@ abstract class Command implements CommandInterface {
         this.data = data
     }
 
-    abstract execute(client: Client, interaction: ChatInputCommandInteraction): Promise<void> | void;
+    abstract execute(client: Client, interaction: ChatInputCommandInteraction): Promise<void> | any;
 
     GetData() {
         return this.data;
