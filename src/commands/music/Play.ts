@@ -22,7 +22,7 @@ class PlayCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        let query = interaction.options.getString("query", true)
+        let query = interaction.options.getString("query", true);
 
         const member = interaction.member;
 

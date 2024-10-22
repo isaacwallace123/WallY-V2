@@ -7,24 +7,26 @@ import { User } from '../../types/User';
 class BalanceCommand extends Command {
     constructor() {
         super({
-            name: 'balance',
-            description: 'Check your user balance.',
+            name: 'give',
+            description: 'Give specified user money',
             options: [
                 {
                     name: 'user',
-                    description: 'The specified user',
+                    description: 'The user you want to give money to.',
                     type: ApplicationCommandOptionType.User,
+                    required: true,
+                },
+                {
+                    name: 'amount',
+                    description: 'The amount you want to give the user.',
+                    type: ApplicationCommandOptionType.Number,
                     required: false,
-                }
+                },
             ]
         });
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        const userOption = interaction.options.getUser("user", false);
-
-        const userId = userOption ? userOption.id : interaction.user.id;
-
         await interaction.deferReply({ ephemeral: true });
 
         if (!interaction.guildId) {
@@ -32,11 +34,11 @@ class BalanceCommand extends Command {
             return;
         }
 
-        const guild = await new User(userId).getGuildData(interaction.guildId);
+        const guild = await new User(interaction.user.id).getGuildData(interaction.guildId);
         
         const balance = guild?.balance || 0;
 
-        await interaction.editReply(`<@${userId}>'s current balance is: ${balance}`);
+        await interaction.editReply(`Your current balance is: ${balance}`);
     }
 }
 
