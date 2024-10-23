@@ -30,12 +30,14 @@ class PlayerInitialization extends Signal {
         await player.extractors.register(SoundCloudExtractor, {});
 
         player.events.on(GuildQueueEvent.playerStart, (queue, track) => {
+            if (!track?.requestedBy) return;
+
             const embed = EmbedGenerator.Info({
                 title: "Playing Track",
                 description: `**[${track.title} - ${track.author}](${track.url})**`,
                 thumbnail: { url: track.thumbnail },
                 footer: { text: `Duration: ${track.duration}` }
-            }).withAuthor(queue.metadata.user);
+            }).withAuthor(track.requestedBy);
 
             return queue.metadata.channel.send({ embeds: [embed] });
         });

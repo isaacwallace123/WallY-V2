@@ -27,23 +27,23 @@ class Guild implements GuildInterface {
         this.daily = guildData.daily;
     }
 
-    async setBalance(amount: number): Promise<Guild> {
-        this.balance = amount;
-
-        await UserModel.updateOne(
-            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
-            { $set: { [`guilds.${this.guildId}.balance`]: this.balance } }
-        );
-
-        return this;
-    }
-
     async setDaily(): Promise<Guild> {
         this.daily = new Date();
 
         await UserModel.updateOne(
             { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
             { $set: { [`guilds.${this.guildId}.daily`]: this.daily } }
+        );
+
+        return this;
+    }
+
+    async setBalance(amount: number): Promise<Guild> {
+        this.balance = amount;
+
+        await UserModel.updateOne(
+            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
+            { $set: { [`guilds.${this.guildId}.balance`]: this.balance } }
         );
 
         return this;
@@ -58,6 +58,12 @@ class Guild implements GuildInterface {
         );
 
         return this;
+    }
+
+    async removeBalance(amount: number): Promise<Guild> {
+        if(this.balance < amount) throw new Error('Insufficient balance');
+
+        return await this.addBalance(-amount);
     }
 }
 

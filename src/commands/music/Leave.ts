@@ -22,22 +22,26 @@ class LeaveCommand extends Command {
 
         const channel = member.voice.channel;
 
-        if (!channel) return interaction.reply({ ephemeral: true, content: 'You must be in a voice call to run this command' });
+        if (!channel) return interaction.reply({ embeds: [EmbedGenerator.Error({
+            title: 'Ouch...',
+            description: 'You want me gone that badly?..'
+        })], ephemeral: true});
 
         const queue = useQueue(interaction.guildId);
-        
-        await interaction.deferReply();
 
-        const embed = EmbedGenerator.Error({
-            title: 'Disconnected!',
-            description: 'Goodbye and have fun!'
-        });
+        if (!queue) return interaction.reply({ embeds: [EmbedGenerator.Error({
+            title: 'Ouch...',
+            description: 'I wasn\'t event playing anything...'
+        })], ephemeral: true });
 
-        if (!queue) return interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.deferReply({ ephemeral: true });
 
         queue.delete();
 
-        return interaction.editReply({ embeds: [embed] });
+        return interaction.editReply({ embeds: [EmbedGenerator.Error({
+            title: 'Disconnected!',
+            description: 'Goodbye, till next time!'
+        })]});
     }
 }
 
