@@ -22,15 +22,17 @@ class PlayCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        let query = interaction.options.getString("query", true);
+        if (!interaction.guildId) return await interaction.reply('This command can only be used in a server');
 
         const member = interaction.member;
 
-        if (!member || !(member instanceof GuildMember)) return interaction.reply({ ephemeral: true, content: 'You must be in a server to continue.' });
+        if (!member || !(member instanceof GuildMember)) return interaction.reply({ ephemeral: true, content: 'You must be in a server to continue' });
 
         const channel = member.voice.channel;
 
-        if (!channel) return interaction.reply({ ephemeral: true, content: 'You must be in a voice call to run this command.' });
+        if (!channel) return interaction.reply({ ephemeral: true, content: 'You must be in a voice call to run this command' });
+        
+        let query = interaction.options.getString("query", true);
 
         const player = useMainPlayer();
 
@@ -42,7 +44,7 @@ class PlayCommand extends Command {
 
         if (!result.hasTracks()) {
             const embed = EmbedGenerator.Error({
-                title: 'No results found',
+                title: 'No Results Found',
                 description: `No results found for \`${query}\``
             });
     
