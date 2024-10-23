@@ -2,14 +2,14 @@ import { GuildMember, type ChatInputCommandInteraction } from 'discord.js';
 
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
-import { useQueue } from 'discord-player';
+import { useMainPlayer } from 'discord-player';
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
-class StopCommand extends Command {
+class ShuffleCommand extends Command {
     constructor() {
         super({
-            name: 'stop',
-            description: 'Stop the music player.',
+            name: 'shuffle',
+            description: 'Shuffle the current queue.',
         });
     }
 
@@ -24,28 +24,22 @@ class StopCommand extends Command {
 
         if (!channel) return interaction.reply({ ephemeral: true, content: 'You must be in a voice call to run this command' });
 
-        const queue = useQueue(interaction.guildId);
+        const player = useMainPlayer();
+        const queue = player.nodes.get(interaction.guildId);
 
-        if (!queue) {
-            const embed = EmbedGenerator.Error({
-                title: 'Not Playing',
-                description: 'I am currently not playing any tracks'
-            });
-
-            return interaction.reply({ embeds: [embed], ephemeral: true });
-        }
+        if (!queue || queue.getSize() === 0) return interaction.reply({ ephemeral: true, content: "There is no queue to shuffle." });
 
         await interaction.deferReply();
 
-        queue.node.stop();
+        queue.tracks.shuffle();
 
         const embed = EmbedGenerator.Info({
-            title: 'Track stopped!',
-            description: 'I have successfully stopped the track'
-        });
+            title: 'Shuffled Queue',
+            description: 'The current queue has been shuffled.',
+        }).withAuthor(interaction.user);
 
         return interaction.editReply({ embeds: [embed] });
     }
 }
 
-export default StopCommand;
+export default ShuffleCommand;
