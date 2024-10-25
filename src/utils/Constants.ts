@@ -14,4 +14,6 @@ const EmbedColor = {
     Info: 0x0099FF,
 };
 
-export { ClientIntents, EmbedColor }
+const websiteLink = "https://wall-y.ca/"
+
+export { ClientIntents, EmbedColor, websiteLink }

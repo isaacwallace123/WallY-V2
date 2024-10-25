@@ -16,9 +16,7 @@ class DailyCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        await interaction.deferReply({ ephemeral: true });
-
-        if (!interaction.guildId) return await interaction.editReply('This command can only be used in a server.');
+        if (!interaction.guildId) return await interaction.reply('This command can only be used in a server');
         
         const guild = await new User(interaction.user.id).getGuildData(interaction.guildId);
 
@@ -26,6 +24,8 @@ class DailyCommand extends Command {
         const CurrentTime = Date.now();
 
         const Timestamp = LastClaimTime ? new Date(LastClaimTime).getTime() : 0;
+
+        await interaction.deferReply();
 
         if (CurrentTime - Timestamp < DailyCooldown) {
             const TimeLeft = DailyCooldown - (CurrentTime - Timestamp);

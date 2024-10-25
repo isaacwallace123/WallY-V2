@@ -14,11 +14,9 @@ class QueueCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        if (!interaction.guildId) return await interaction.reply('This command can only be used in a server');
-
         const member = interaction.member;
 
-        if (!member || !(member instanceof GuildMember)) return interaction.reply({ ephemeral: true, content: 'You must be in a server to continue' });
+        if (!member || !(member instanceof GuildMember) || !interaction.guildId) return interaction.reply({ ephemeral: true, content: 'This command can only be used in a server' });
 
         const channel = member.voice.channel;
 
