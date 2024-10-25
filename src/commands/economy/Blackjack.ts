@@ -130,9 +130,22 @@ class BlackjackCommand extends Command {
         const playerTotal = this.calculateTotal(playerHand);
         const dealerTotal = this.calculateTotal(dealerHand);
 
-        const outcome = response.customId === PlayerAction.Hit 
-            ? await this.playerHit(response, playerHand, dealerHand, deck, amount, playerTotal, dealerTotal) 
-            : await this.dealerTurn(response, playerHand, dealerHand, deck, amount, playerTotal, dealerTotal);
+        let outcome: boolean;
+
+        if (response.customId === PlayerAction.Hit) {
+            outcome = await this.playerHit(response, playerHand, dealerHand, deck, amount, playerTotal, dealerTotal);
+        } else if (response.customId === PlayerAction.Double) {
+            amount *= 2;
+
+            const card = deck.pop()!;
+            playerHand.push(card);
+
+            const newPlayerTotal = this.calculateTotal(playerHand);
+
+            outcome = newPlayerTotal > 21 || await this.dealerTurn(response, playerHand, dealerHand, deck, amount, newPlayerTotal, dealerTotal);
+        } else {
+            outcome = await this.dealerTurn(response, playerHand, dealerHand, deck, amount, playerTotal, dealerTotal);
+        }
         
         if (outcome) collector.stop();
     }
