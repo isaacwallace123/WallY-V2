@@ -189,24 +189,19 @@ class BlackjackSession {
         }[OutCome];
 
         return EmbedType({
-            title: `${this.interaction.user.username}'s Blackjack Game`,
+            description: `**${this.interaction.user.username}'s Blackjack Game**`,
             fields: [
                 {
-                    name: `${OutCome === GameOutcome.Ongoing ? "Stake" : `${OutCome === GameOutcome.Loss ? "Loss" : "Won"}`}`,
+                    name: `${OutCome === GameOutcome.Ongoing ? "Stake" : `${OutCome === GameOutcome.Loss ? "Loss" : `${OutCome === GameOutcome.Win ? "Won" : "Kept"}`}`}`,
                     value: `$${this.stake}`,
                 },
                 {
                     name: 'Dealer', 
-                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `(Total: ${this.dealer.value})` : ''}`,
+                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : '\` ?? \`'}`,
                 },
-                /*{
-                    name: '\u200B',
-                    value: '\u200B',
-                    inline: true,
-                },*/
                 { 
                     name: 'You', 
-                    value: `${this.player.display(this.player.hand.length)} (Total: ${this.player.value})`,
+                    value: `${this.player.display(this.player.hand.length)} \` ${this.player.value} \``,
                 }
             ],
         });
