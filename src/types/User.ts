@@ -46,7 +46,7 @@ class User implements UserInterface {
             balance: 0,
             level: 1,
             xp: 0,
-            daily: new Date(),
+            daily: new Date(Date.now() - (24 * 60 * 60 * 1000)),
         };
 
         this.guilds.set(guildId, newGuild);

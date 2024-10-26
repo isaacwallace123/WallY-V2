@@ -9,7 +9,7 @@ abstract class Command implements CommandInterface {
     public data: CommandData;
 
     constructor(data: CommandData) {
-        this.data = data
+        this.data = data;
     }
 
     abstract execute(client: Client, interaction: ChatInputCommandInteraction): Promise<void> | any;
