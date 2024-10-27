@@ -12,7 +12,7 @@ abstract class Signal {
         this.data = data;
     }
 
-    abstract execute(client: Client, ...args: any[]): Promise<void> | void;
+    abstract execute(client: Client, ...args: any[]): Promise<any> | any;
 
     GetData() {
         return this.data;

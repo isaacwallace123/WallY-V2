@@ -22,6 +22,10 @@ export class EmbedGenerator extends EmbedBuilder {
         return EmbedGenerator.create(data).setColor(EmbedColor.Info);
     }
 
+    public static default(data?: EmbedInit) {
+        return EmbedGenerator.create(data).setColor(EmbedColor.Defailt);
+    }
+
     public static create(data?: EmbedInit) {
         const client = ClientHook()
         return new EmbedGenerator(data).setClient(client);

@@ -4,6 +4,9 @@ import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
+import { Suffix } from '../../utils/Suffix';
+import { CurrencySymbol } from '../../utils/Constants';
+
 class PayCommand extends Command {
     constructor() {
         super({
@@ -47,7 +50,7 @@ class PayCommand extends Command {
         const NewUserData = await TargetUserData.addBalance(amount);
         await UserData.removeBalance(amount);
 
-        return await interaction.editReply({ content: `<@${NewUserData.user.id}>'s current balance is: ${NewUserData.balance}` });
+        return await interaction.editReply({ content: `<@${NewUserData.user.id}>'s new balance is ${CurrencySymbol}**${Suffix(NewUserData.balance)}**` });
     }
 }
 

@@ -1,22 +1,28 @@
 import { CommandData } from 'commandkit';
 import { ChatInputCommandInteraction, Client } from 'discord.js';
 
+interface ExtraCommandData {
+    cooldown?: number;
+}
+
+type CommandType = CommandData & ExtraCommandData;
+
 interface CommandInterface {
-    data: CommandData;
+    data: CommandType;
 }
 
 abstract class Command implements CommandInterface {
-    public data: CommandData;
+    public data: CommandType;
 
-    constructor(data: CommandData) {
+    constructor(data: CommandType) {
         this.data = data;
     }
 
-    abstract execute(client: Client, interaction: ChatInputCommandInteraction): Promise<void> | any;
+    abstract execute(client: Client, interaction: ChatInputCommandInteraction): Promise<any> | any;
 
     GetData() {
         return this.data;
     }
 }
 
-export { CommandInterface, Command };
+export { CommandInterface, CommandType, Command };

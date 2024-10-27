@@ -7,8 +7,9 @@ import { User } from '../../types/User';
 import { Guild } from '../../types/Guild';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
-import { websiteLink, CardFaces } from '../../utils/Constants';
-import { text } from 'stream/consumers';
+import { WebsiteLink, CurrencySymbol } from '../../utils/Constants';
+import { Suffix } from '../../utils/Suffix';
+import { Card, Suits, Faces, UnknownCard } from '../../types/Card';
 
 enum PlayerAction {
     Hit = 'hit',
@@ -16,24 +17,11 @@ enum PlayerAction {
     Double = 'double'
 }
 
-enum CardSuit {
-    Spade = 'spade',
-    Diamond = 'diamond',
-    Club = 'club',
-    Heart = 'heart',
-}
-
 enum GameOutcome {
     Win = "win",
     Tie = "tie",
     Loss = "loss",
     Ongoing = "ongoing",
-}
-
-interface Card {
-    value: number;
-    suit: CardSuit;
-    face: string
 }
 
 class Deck {
@@ -45,8 +33,12 @@ class Deck {
     }
 
     private Create(): Card[] {
-        return Object.values(CardSuit).flatMap(suit =>
-            CardFaces.map((face, index) => ({value: face === 'A' ? 11 : ['K', 'Q', 'J'].includes(face) ? 10 : index + 1, suit, face}))
+        return Object.values(Suits).flatMap(suit =>
+            Object.values(Faces).map((face, index) => ({
+                value: face === Faces.Aces ? 11 : [Faces.King, Faces.Queen, Faces.Jack].includes(face) ? 10 : index + 1,
+                suit: suit as Suits,
+                face: face as Faces
+            }))
         );
     }
 
@@ -97,26 +89,11 @@ class BlackjackPlayer {
         return total;
     }
 
-    private GetIcon(suit: CardSuit): string {
-        switch (suit) {
-            case CardSuit.Heart:
-                return '♥';
-            case CardSuit.Diamond:
-                return '♦';
-            case CardSuit.Spade:
-                return '♠';
-            case CardSuit.Club:
-                return '♣';
-            default:
-                return '';
-        }
-    }
-
     display(cards: number): string {
         const showsCards = this.hand.slice(0, Math.min(cards, this.hand.length));
-        const displayedCards = showsCards.map(card => `[${card.face}${this.GetIcon(card.suit)}](${websiteLink})`).join(', ');
+        const displayedCards = showsCards.map(card => `[${card.face}${card.suit}](${WebsiteLink})`).join(', ');
 
-        return this.hand.length - showsCards.length > 0 ? `${displayedCards}, [??](${websiteLink})` : displayedCards;
+        return this.hand.length - showsCards.length > 0 ? `${displayedCards}, [??](${WebsiteLink})` : displayedCards;
     }
     
     hit(): number {
@@ -193,11 +170,11 @@ class BlackjackSession {
             fields: [
                 {
                     name: `${OutCome === GameOutcome.Ongoing ? "Stake" : `${OutCome === GameOutcome.Loss ? "Loss" : `${OutCome === GameOutcome.Win ? "Won" : "Kept"}`}`}`,
-                    value: `$${this.stake}`,
+                    value: `${CurrencySymbol}${Suffix(this.stake)}`,
                 },
                 {
                     name: 'Dealer', 
-                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : '\` ?? \`'}`,
+                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : `${UnknownCard.Left}${UnknownCard.Right}`}`,
                 },
                 { 
                     name: 'You', 

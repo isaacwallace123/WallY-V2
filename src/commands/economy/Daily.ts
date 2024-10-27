@@ -4,7 +4,11 @@ import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
-const RewardAmount = 100;
+import { Suffix } from '../../utils/Suffix';
+import { CurrencySymbol } from '../../utils/Constants';
+import { EmbedGenerator } from '../../utils/EmbedGenerator';
+
+const RewardAmount = 1000;
 const DailyCooldown = 24 * 60 * 60 * 1000;
 
 class DailyCommand extends Command {
@@ -26,16 +30,14 @@ class DailyCommand extends Command {
         const CurrentTime = Date.now();
         const Timestamp = LastClaimTime ? new Date(LastClaimTime).getTime() : 0;
 
-        if (CurrentTime - Timestamp < DailyCooldown) {
-            const TimeLeft = DailyCooldown - (CurrentTime - Timestamp);
-
-            return await interaction.editReply(`You have already claimed your daily reward. Please come back in ${Math.floor(TimeLeft / (1000 * 60 * 60))} hours and ${Math.floor((TimeLeft % (1000 * 60 * 60)) / (1000 * 60))} minutes.`);
-        }
+        if (CurrentTime - Timestamp < DailyCooldown) return await interaction.editReply({ embeds: [EmbedGenerator.default({
+            description: `You have already claimed your daily reward. Try again <t:${Math.floor((Timestamp + DailyCooldown - CurrentTime) / 1000)}:R>`
+        })]});
         
         const { balance } = await guild.addBalance(RewardAmount);
         await guild.setDaily();
 
-        await interaction.editReply(`Your current balance is: ${balance}`);
+        await interaction.editReply(`Your new balance is ${CurrencySymbol}**${Suffix(balance)}**`);
     }
 }
 

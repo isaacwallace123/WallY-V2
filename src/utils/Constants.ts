@@ -12,10 +12,13 @@ const EmbedColor = {
     Error: 0xff2a16,
     Warning: 0xffd700,
     Info: 0x0099FF,
+    Defailt: 0x2b2d31,
 };
 
-const websiteLink = "https://wall-y.ca/"
+const Suffixes = ["", "K", "M", "B", "T", "Q"];
 
-const CardFaces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+const CurrencySymbol = '$';
 
-export { ClientIntents, EmbedColor, websiteLink, CardFaces }
+const WebsiteLink = "https://wall-y.ca/"
+
+export { ClientIntents, EmbedColor, WebsiteLink, Suffixes, CurrencySymbol }

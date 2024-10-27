@@ -3,6 +3,8 @@ import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from '
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
+import { Suffix } from '../../utils/Suffix';
+import { CurrencySymbol } from '../../utils/Constants';
 
 class BalanceCommand extends Command {
     constructor() {
@@ -29,16 +31,11 @@ class BalanceCommand extends Command {
 
         await interaction.deferReply({ ephemeral: true });
 
-        if (!interaction.guildId) {
-            await interaction.editReply('This command can only be used in a server.');
-            return;
-        }
-
         const guild = await new User(userId).getGuildData(interaction.guildId);
         
         const balance = guild?.balance || 0;
 
-        await interaction.editReply(`<@${userId}>'s current balance is: ${balance}`);
+        await interaction.editReply(`<@${userId}>'s current balance is ${CurrencySymbol}**${Suffix(balance)}**`);
     }
 }
 
