@@ -43,7 +43,7 @@ class User implements UserInterface {
         if (existingGuild) return new Guild(this, guildId, existingGuild);
 
         const newGuild: GuildInterface = {
-            balance: 0,
+            balance: 1000,
             level: 1,
             xp: 0,
             daily: new Date(Date.now() - (24 * 60 * 60 * 1000)),

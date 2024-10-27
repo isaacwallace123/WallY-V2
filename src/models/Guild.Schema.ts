@@ -4,7 +4,7 @@ import { GuildInterface } from "../types/Guild";
 const guildSchema = new Schema<GuildInterface>({
     balance: {
         type: Number,
-        default: 0,
+        default: 1000,
     },
     level: {
         type: Number,

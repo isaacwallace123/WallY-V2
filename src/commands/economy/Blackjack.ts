@@ -121,6 +121,8 @@ class BlackjackSession {
 
     private collector: any;
 
+    private blackjack: boolean;
+
     constructor(private interaction: ChatInputCommandInteraction, private stake: number, private DoubleDownEnabled: boolean) {
         this.IsFinished = false;
 
@@ -133,6 +135,8 @@ class BlackjackSession {
         this.dealer.hit();
         this.player.hit();
         this.dealer.hit();
+
+        this.blackjack = this.player.value == 21;
     }
 
     private GetOutcome(): GameOutcome {
@@ -190,6 +194,8 @@ class BlackjackSession {
         const OutCome: GameOutcome = this.GetOutcome();
 
         if (OutCome === GameOutcome.Win) {
+            this.stake += Math.ceil(this.blackjack ? this.stake * 0.5 : 0);
+
             await this.userdata.addBalance(this.stake);
         } else if (OutCome === GameOutcome.Loss) {
             await this.userdata.removeBalance(this.stake);
@@ -231,7 +237,7 @@ class BlackjackSession {
         if (this.IsFinished) {
             this.collector.stop();
 
-            this.EndSession();
+            await this.EndSession();
         }
 
         await response.update({ embeds: [this.DisplayMatch()], components: this.IsFinished ? [] : [this.CreateActionRow()] });
@@ -243,7 +249,7 @@ class BlackjackSession {
 
     async start() {
         if (this.player.finished || this.dealer.finished) {
-            this.EndSession();
+            await this.EndSession();
 
             return this.interaction.editReply({ embeds: [this.DisplayMatch()], components: [] });
         }
@@ -256,7 +262,7 @@ class BlackjackSession {
 
         this.collector.on('end', async (collected: ButtonInteraction[], reason: string) => {
             if (reason === 'time') {
-                this.EndSession();
+                await this.EndSession();
     
                 return message.edit({ embeds: [this.DisplayMatch()], components: [] });
             }

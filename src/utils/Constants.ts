@@ -17,8 +17,8 @@ const EmbedColor = {
 
 const Suffixes = ["", "K", "M", "B", "T", "Q"];
 
-const CurrencySymbol = '<:Coin:1300204157306798181>';
+const CurrencySymbol = '<:Currency:1300204157306798181>';
 
-const WebsiteLink = "https://wall-y.ca/"
+const WebsiteLink = "https://wall-y.ca/";
 
 export { ClientIntents, EmbedColor, WebsiteLink, Suffixes, CurrencySymbol }

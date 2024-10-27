@@ -26,15 +26,14 @@ class DailyCommand extends Command {
         
         const guild = await new User(interaction.user.id).getGuildData(interaction.guildId);
 
-        const LastClaimTime: Date | null = guild?.daily || null;
-        const CurrentTime = Date.now();
-        const Timestamp = LastClaimTime ? new Date(LastClaimTime).getTime() : 0;
+        const Timestamp = guild.daily ? new Date(guild.daily).getTime() : 0;
 
-        if (CurrentTime - Timestamp < DailyCooldown) return await interaction.editReply({ embeds: [EmbedGenerator.default({
-            description: `You have already claimed your daily reward. Try again <t:${Math.floor((Timestamp + DailyCooldown - CurrentTime) / 1000)}:R>`
+        if (Date.now() - Timestamp < DailyCooldown) return await interaction.editReply({ embeds: [EmbedGenerator.default({
+            description: `You have already claimed your daily reward. Try again <t:${Math.floor(new Date(Timestamp + DailyCooldown).getTime() / 1000)}:R>`
         })]});
         
         const { balance } = await guild.addBalance(RewardAmount);
+        
         await guild.setDaily();
 
         await interaction.editReply(`Your new balance is ${CurrencySymbol}**${Suffix(balance)}**`);
