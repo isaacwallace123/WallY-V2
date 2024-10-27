@@ -33,11 +33,12 @@ class Deck {
     }
 
     private Create(): Card[] {
-        return Object.values(Suits).flatMap(suit =>
-            Object.values(Faces).map((face, index) => ({
-                value: face === Faces.Aces ? 11 : [Faces.King, Faces.Queen, Faces.Jack].includes(face) ? 10 : index + 1,
-                suit: suit as Suits,
-                face: face as Faces
+        return Object.values(Suits).flatMap(suit => 
+            Object.entries(Faces).map(([faceName, face]) => ({
+                value: faceName === 'Aces' ? 11 : ['King', 'Queen', 'Jack'].includes(faceName) ? 10 : Number(faceName),
+                suit: suit,
+                face: faceName,
+                icon: suit === Suits.Clubs || suit === Suits.Spades ? face.Black : face.Red
             }))
         );
     }
@@ -77,23 +78,24 @@ class BlackjackPlayer {
 
     private Calculate(): number {
         let total = this.hand.reduce((accumulator, card) => accumulator + card.value, 0);
-        let aces = this.hand.filter(card => card.face === 'A').length;
 
+        let aces = this.hand.filter(card => card.face === 'Aces').length; 
+    
         while (total > 21 && aces > 0) {
             total -= 10;
             aces--;
         }
     
         this.value = total;
-
+    
         return total;
     }
 
     display(cards: number): string {
         const showsCards = this.hand.slice(0, Math.min(cards, this.hand.length));
-        const displayedCards = showsCards.map(card => `[${card.face}${card.suit}](${WebsiteLink})`).join(', ');
+        const displayedCards = showsCards.map(card => `[${card.suit}${card.icon}](${WebsiteLink})`).join(', ');
 
-        return this.hand.length - showsCards.length > 0 ? `${displayedCards}, [??](${WebsiteLink})` : displayedCards;
+        return this.hand.length - showsCards.length > 0 ? `${displayedCards} [${UnknownCard.Left}${UnknownCard.Right}](${WebsiteLink})` : displayedCards;
     }
     
     hit(): number {
@@ -174,7 +176,7 @@ class BlackjackSession {
                 },
                 {
                     name: 'Dealer', 
-                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : `${UnknownCard.Left}${UnknownCard.Right}`}`,
+                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : ' ?? '}`,
                 },
                 { 
                     name: 'You', 
