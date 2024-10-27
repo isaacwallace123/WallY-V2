@@ -17,7 +17,7 @@ const EmbedColor = {
 
 const Suffixes = ["", "K", "M", "B", "T", "Q"];
 
-const CurrencySymbol = '$';
+const CurrencySymbol = '<:Coin:1300204157306798181>';
 
 const WebsiteLink = "https://wall-y.ca/"
 

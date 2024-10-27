@@ -61,7 +61,7 @@ class BegCommand extends Command {
 
         const embed = (amount <= 0 ? EmbedGenerator.Error : EmbedGenerator.default)({
             title: UsedQuote.title,
-            description: `"${UsedQuote.description}${amount <= 0 ? "" : ` ${CurrencySymbol} **${Suffix(amount)}**`}"`,
+            description: `"${UsedQuote.description}${amount <= 0 ? "" : ` ${CurrencySymbol}**${Suffix(amount)}**`}"`,
             footer: { text: `${amount <= 0 ? "Imagine begging" : ""}` }
         });
 
