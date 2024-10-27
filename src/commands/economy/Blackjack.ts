@@ -176,7 +176,7 @@ class BlackjackSession {
                 },
                 {
                     name: 'Dealer', 
-                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : ' ?? '}`,
+                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : '\` ?? \`'}`,
                 },
                 { 
                     name: 'You', 
