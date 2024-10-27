@@ -176,7 +176,7 @@ class BlackjackSession {
             fields: [
                 {
                     name: `${OutCome === GameOutcome.Ongoing ? "Stake" : `${OutCome === GameOutcome.Loss ? "Loss" : `${OutCome === GameOutcome.Win ? "Won" : "Kept"}`}`}`,
-                    value: `${CurrencySymbol}${Suffix(this.stake)}`,
+                    value: `**${CurrencySymbol}${Suffix(this.stake)}**`,
                 },
                 {
                     name: 'Dealer', 

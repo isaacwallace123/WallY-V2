@@ -35,7 +35,7 @@ class BalanceCommand extends Command {
         
         const balance = guild?.balance || 0;
 
-        await interaction.editReply(`<@${userId}>'s current balance is ${CurrencySymbol}**${Suffix(balance)}**`);
+        await interaction.editReply(`<@${userId}>'s current balance is **${CurrencySymbol}${Suffix(balance)}**`);
     }
 }
 

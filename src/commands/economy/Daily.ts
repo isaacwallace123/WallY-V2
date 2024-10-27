@@ -33,10 +33,10 @@ class DailyCommand extends Command {
         })]});
         
         const { balance } = await guild.addBalance(RewardAmount);
-        
+
         await guild.setDaily();
 
-        await interaction.editReply(`Your new balance is ${CurrencySymbol}**${Suffix(balance)}**`);
+        await interaction.editReply(`Your new balance is **${CurrencySymbol}${Suffix(balance)}**`);
     }
 }
 

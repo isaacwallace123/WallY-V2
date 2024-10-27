@@ -50,7 +50,7 @@ class PayCommand extends Command {
         const NewUserData = await TargetUserData.addBalance(amount);
         await UserData.removeBalance(amount);
 
-        return await interaction.editReply({ content: `<@${NewUserData.user.id}>'s new balance is ${CurrencySymbol}**${Suffix(NewUserData.balance)}**` });
+        return await interaction.editReply({ content: `<@${NewUserData.user.id}>'s new balance is **${CurrencySymbol}${Suffix(NewUserData.balance)}**` });
     }
 }
 
