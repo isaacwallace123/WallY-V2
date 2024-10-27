@@ -5,8 +5,6 @@ enum Suits {
     Spades = '<:spades:1300184771296628786>',
 }
 
-console.log(Suits)
-
 interface FaceType {
     Red: string;
     Black: string;

@@ -93,9 +93,9 @@ class BlackjackPlayer {
 
     display(cards: number): string {
         const showsCards = this.hand.slice(0, Math.min(cards, this.hand.length));
-        const displayedCards = showsCards.map(card => `[${card.suit}${card.icon}](${WebsiteLink})`).join(', ');
+        const displayedCards = showsCards.map(card => `[${card.suit}${card.icon}](${WebsiteLink})`).join('  ');
 
-        return this.hand.length - showsCards.length > 0 ? `${displayedCards} [${UnknownCard.Left}${UnknownCard.Right}](${WebsiteLink})` : displayedCards;
+        return this.hand.length - showsCards.length > 0 ? `${displayedCards}  [${UnknownCard.Left}${UnknownCard.Right}](${WebsiteLink})` : displayedCards;
     }
     
     hit(): number {
