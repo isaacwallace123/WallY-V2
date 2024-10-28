@@ -6,6 +6,7 @@ import { User } from '../../types/User';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 import { FormatBalance, FormatBank, FormatCrypto } from '../../utils/FormatCurrency';
+import { Server } from '../../types/Server';
 
 class BalanceCommand extends Command {
     constructor() {
@@ -27,21 +28,23 @@ class BalanceCommand extends Command {
         if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
         const userOption = interaction.options.getUser("user", false);
-
-        const userId = userOption ? userOption.id : interaction.user.id;
-        const user = client.users.cache.find((user) => user.id === userId);
+        const user = client.users.cache.find((user) => user.id === (userOption ? userOption.id : interaction.user.id));
 
         if (!user) return await interaction.reply({ content: 'User does not exist', ephemeral: true });
 
         await interaction.deferReply({ ephemeral: true });
 
-        const UserModel = new User(userId);
+        const UserModel = new User(user.id);
 
         const { bank } = await UserModel.getUserData();
         const { balance, crypto } = await UserModel.getGuildData(interaction.guildId);
+        const { leaderboards } = await new Server(interaction.guildId).sortBalances();
+
+        const userPlacement = leaderboards.balances.findIndex(userId => userId === user.id) + 1;
 
         const embed = EmbedGenerator.default({
-            description: `${FormatBalance(balance)}\n${FormatCrypto(crypto)}\n${FormatBank(bank)}`
+            description: `${FormatBalance(balance)}\n${FormatCrypto(crypto)}\n${FormatBank(bank)}`,
+            footer: { text: `Server Rank: #${userPlacement}` }
         }).withAuthor(user);
 
         await interaction.editReply({ embeds: [embed] });
