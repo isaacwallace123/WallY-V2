@@ -49,25 +49,17 @@ class PayCommand extends Command {
             description: `You don't have ${FormatBalance(amount)} to give.`
         }).withAuthor(interaction.user)]});
 
-        const { balance: TargetBalance } = await TargetUserData.addBalance(amount);
-        const { balance: UserBalance } = await UserData.removeBalance(amount);
+        await interaction.editReply({ embeds: [EmbedGenerator.default({
+            description: `Pending transaction....`,
+        })]});
+
+        await TargetUserData.addBalance(amount);
+        await UserData.removeBalance(amount);
 
         const embed = EmbedGenerator.Success({
-            title: 'Payment Successful',
+            title: 'Transaction Complete',
             description: `<@${interaction.user.id}> **-->** ${FormatBalance(amount)} **-->** <@${user.id}>`,
-            /*fields: [
-                {
-                    name: `${interaction.user.username}`,
-                    value: `${FormatBalance(UserBalance)}`,
-                    inline: true,
-                },
-                {
-                    name: `${user.username}`,
-                    value: `${FormatBalance(TargetBalance)}`,
-                    inline: true,
-                },
-            ]*/
-        })
+        });
 
         return await interaction.editReply({ embeds: [embed] });
     }
