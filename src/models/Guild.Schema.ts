@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 
 import { GuildInterface } from "../types/Guild";
 
-const guildSchema = new Schema<GuildInterface>({
+const GuildObject = {
     balance: {
         type: Number,
         default: 1000,
@@ -17,12 +17,14 @@ const guildSchema = new Schema<GuildInterface>({
     },
     xp: {
         type: Number,
-        default: 1,
+        default: 0,
     },
     daily: {
         type: Date,
         default: Date.now(),
     }
-}, { _id: false });
+}
 
-export default guildSchema;
+const GuildSchema = new Schema<GuildInterface>(GuildObject, { _id: false });
+
+export { GuildObject, GuildSchema };

@@ -5,6 +5,7 @@ import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
 import { FormatBalance } from '../../utils/FormatCurrency';
+import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 class PayCommand extends Command {
     constructor() {
@@ -31,25 +32,44 @@ class PayCommand extends Command {
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
-        await interaction.deferReply({ ephemeral: true });
-
         const user = interaction.options.getUser("user", true);
 
-        if(user.id === interaction.user.id) return await interaction.editReply('You cannot pay yourself!');
+        if(user.id === interaction.user.id) return await interaction.reply({ content: 'You cannot pay yourself!', ephemeral: true });
 
         const amount = interaction.options.getInteger("amount", true);
 
-        if(amount <= 0) return await interaction.editReply('The amount must be a positive number greater than 0');
+        if(amount <= 0) return await interaction.reply({ content: 'The amount must be a positive number greater than 0', ephemeral: true });
+
+        await interaction.deferReply();
 
         const TargetUserData = await new User(user.id).getGuildData(interaction.guildId);
         const UserData = await new User(interaction.user.id).getGuildData(interaction.guildId);
 
-        if(UserData.balance < amount) return await interaction.editReply('You do not have enough money to pay user');
+        if(UserData.balance < amount) return await interaction.editReply({ embeds: [EmbedGenerator.Error({
+            description: `You don't have ${FormatBalance(amount)} to give.`
+        }).withAuthor(interaction.user)]});
 
-        const NewUserData = await TargetUserData.addBalance(amount);
-        await UserData.removeBalance(amount);
+        const { balance: TargetBalance } = await TargetUserData.addBalance(amount);
+        const { balance: UserBalance } = await UserData.removeBalance(amount);
 
-        return await interaction.editReply({ content: `<@${NewUserData.user.id}>'s new balance is **${FormatBalance(NewUserData.balance)}**` });
+        const embed = EmbedGenerator.Success({
+            title: 'Payment Successful',
+            description: `<@${interaction.user.id}> --> ${FormatBalance(amount)} --> <@${user.id}>`,
+            fields: [
+                {
+                    name: `${interaction.user.username}`,
+                    value: `${FormatBalance(UserBalance)}`,
+                    inline: true,
+                },
+                {
+                    name: `${user.username}`,
+                    value: `${FormatBalance(TargetBalance)}`,
+                    inline: true,
+                },
+            ]
+        })
+
+        return await interaction.editReply({ embeds: [embed] });
     }
 }
 

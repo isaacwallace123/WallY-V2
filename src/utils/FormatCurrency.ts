@@ -1,5 +1,7 @@
 import { Suffix } from "./Suffix";
 
+import { getMaxBalance } from "./Constants";
+
 const Currencies = {
     balance: '<:Currency:1300204157306798181>',
     crypto: '<:bitcoin:1300519754972397629>',
@@ -10,6 +12,6 @@ const FormatBalance = (amount: number) => `**${Currencies.balance}${Suffix(amoun
 
 const FormatCrypto = (amount: number) => `**${Currencies.crypto}${Suffix(amount)}**`;
 
-const FormatBank = (amount: number) => `**${Currencies.bank}${Suffix(amount)}**`;
+const FormatBank = (balance: number, level: number) => `**${Currencies.bank}${Suffix(balance)} / ${Suffix(getMaxBalance(level))}**`;
 
 export { Currencies, FormatBalance, FormatCrypto, FormatBank };

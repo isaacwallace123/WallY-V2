@@ -1,12 +1,19 @@
 import { Document } from "mongoose";
+
+import { UserModel, UserObject } from "../models/User.Schema";
+import { GuildObject } from "../models/Guild.Schema";
+
+import { Server } from "./Server";
 import { Guild, GuildInterface } from "./Guild";
 
-import UserModel from "../models/User.Schema";
-import { Server } from "./Server";
+interface BankInterface {
+    balance: number;
+    level: number;
+}
 
 interface UserInterface {
     id: string;
-    bank: number;
+    bank: BankInterface;
     guilds: Map<string, GuildInterface>;
 }
 
@@ -14,7 +21,11 @@ type UserDocument = Document & UserInterface;
 
 class User implements UserInterface {
     id: string;
-    bank: number = 0;
+
+    bank: BankInterface = {
+        balance: UserObject.bank.balance.default,
+        level: UserObject.bank.level.default,
+    };
 
     guilds: Map<string, GuildInterface> = new Map<string, GuildInterface>();
 
@@ -50,10 +61,11 @@ class User implements UserInterface {
         if (existingGuild) return new Guild(this, guildId, existingGuild);
 
         const newGuild: GuildInterface = {
-            balance: 1000,
-            crypto: 0,
-            level: 1,
-            xp: 0,
+            balance: GuildObject.balance.default,
+            crypto: GuildObject.crypto.default,
+            level: GuildObject.level.default,
+            xp: GuildObject.xp.default,
+
             daily: new Date(Date.now() - (24 * 60 * 60 * 1000)),
         };
 
@@ -64,18 +76,26 @@ class User implements UserInterface {
         return new Guild(this, guildId, newGuild);
     }
 
-    async setBank(amount: number): Promise<User> {
-        this.bank = amount;
+    async upgradeBank(): Promise<User> {
+        this.bank.level++;
 
-        await UserModel.updateOne({ id: this.id },{ $set: { bank: this.bank } });
+        await UserModel.updateOne({ id: this.id }, { $set: { "bank.level": 1 } });
+
+        return this;
+    }
+
+    async setBank(amount: number): Promise<User> {
+        this.bank.balance = amount;
+
+        await UserModel.updateOne({ id: this.id },{ $set: { "bank.balance": amount } });
 
         return this;
     }
 
     async addBank(amount: number): Promise<User> {
-        this.bank += amount;
+        this.bank.balance += amount;
 
-        await UserModel.updateOne({ id: this.id },{ $inc: { bank: amount } });
+        await UserModel.updateOne({ id: this.id },{ $inc: { "bank.balance": amount } });
 
         return this;
     }

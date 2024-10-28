@@ -2,9 +2,9 @@ import { model, Schema } from "mongoose";
 
 import { Server } from "../types/Server";
 
-import UserModel from "./User.Schema";
+import { UserModel } from "./User.Schema";
 
-const serverSchema = new Schema<Server>({
+const ServerObject = {
     id: {
         type: String,
         required: true,
@@ -26,8 +26,10 @@ const serverSchema = new Schema<Server>({
             default: [],
         },
     },
-});
+}
 
-const ServerModel = model<Server>('Server', serverSchema);
+const ServerSchema = new Schema<Server>(ServerObject);
 
-export default ServerModel;
+const ServerModel = model<Server>('Server', ServerSchema);
+
+export { ServerObject, ServerModel };

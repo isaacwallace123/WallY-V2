@@ -39,7 +39,7 @@ class LeaderboardCommand extends Command {
         );
 
         const leaderboardMessage = playersWithLevels.filter(userId => userId !== null)
-            .map((player, index) => `**${index + 1}. <@${player.id}> - Level ${player.level}** `)
+            .map((player, index) => `**${index + 1}. <@${player.id}> - Level ${player.level}**`)
             .join('\n');
 
         const userPlacement = leaderboards.levels.findIndex(userId => userId === interaction.user.id) + 1;
@@ -64,7 +64,7 @@ class LeaderboardCommand extends Command {
         );
 
         const leaderboardMessage = playersWithLevels.filter(userId => userId !== null)
-            .map((player, index) => `**${index + 1}. <@${player.id}> - ${FormatBalance(player.balance)}** `)
+            .map((player, index) => `**${index + 1}. <@${player.id}> - ${FormatBalance(player.balance)}**`)
             .join('\n');
 
         const userPlacement = leaderboards.balances.findIndex(userId => userId === interaction.user.id) + 1;

@@ -2,9 +2,9 @@ import { model, Schema } from "mongoose";
 
 import { User } from "../types/User";
 
-import guildSchema from "./Guild.Schema";
+import { GuildSchema } from "./Guild.Schema";
 
-const userSchema = new Schema<User>({
+const UserObject = {
     id: {
         type: String,
         required: true,
@@ -12,17 +12,25 @@ const userSchema = new Schema<User>({
     },
 
     bank: {
-        type: Number,
-        default: 0
+        balance: {
+            type: Number,
+            default: 0
+        },
+        level: {
+            type: Number,
+            default: 1
+        },
     },
 
     guilds: {
         type: Map,
-        of: guildSchema,
+        of: GuildSchema,
         default: {},
     }
-});
+}
 
-const UserModel = model<User>('User', userSchema);
+const UserSchema = new Schema<User>(UserObject);
 
-export default UserModel;
+const UserModel = model<User>('User', UserSchema);
+
+export { UserObject, UserModel };

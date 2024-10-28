@@ -1,4 +1,4 @@
-import UserModel from "../models/User.Schema";
+import { UserModel } from "../models/User.Schema";
 import { User } from "./User";
 
 interface GuildInterface {

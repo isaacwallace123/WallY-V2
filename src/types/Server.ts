@@ -1,8 +1,8 @@
 import { Document } from "mongoose";
 
-import { User, UserDocument } from "./User";
+import { User } from "./User";
 
-import ServerModel from "../models/Server.Schema";
+import { ServerModel, ServerObject } from "../models/Server.Schema";
 
 interface Leaderboards {
     balances: string[];
@@ -20,11 +20,11 @@ type ServerDocument = Document & ServerInterface;
 class Server implements ServerInterface {
     id: string;
 
-    bank: number = 0;
+    bank: number = ServerObject.bank.default;
 
     leaderboards:Leaderboards = {
-        balances: [],
-        levels: [],
+        balances: ServerObject.leaderboards.balances.default,
+        levels: ServerObject.leaderboards.levels.default,
     }
 
     constructor(id: string) {
