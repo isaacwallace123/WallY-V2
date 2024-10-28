@@ -32,17 +32,20 @@ class LeaderboardCommand extends Command {
         const { leaderboards } = await new Server(interaction.guildId!).sortLevels();
 
         const playersWithLevels = await Promise.all(
-            leaderboards.levels.map(async (userId) => {
+            leaderboards.levels.slice(0,10).map(async (userId) => {
                 const { level } = await new User(userId).getGuildData(interaction.guildId!);
                 return { id: userId, level: level };
             })
         );
 
-        const leaderboardMessage = playersWithLevels.map((player, index) => `**${index + 1}. <@${player.id}> - Level ${player.level}**`).join('\n');
+        const leaderboardMessage = playersWithLevels.map((player, index) => `**${index + 1}. <@${player.id}> - Level ${player.level}** `).join('');
+
+        const userPlacement = leaderboards.levels.findIndex(userId => userId === interaction.user.id) + 1;
 
         const embed = EmbedGenerator.Info({
             title: 'Most Experienced Users',
             description: leaderboardMessage,
+            footer: { text: `Your placement is #${userPlacement}` }
         });
 
         await interaction.reply({ embeds: [embed] });
@@ -52,17 +55,20 @@ class LeaderboardCommand extends Command {
         const { leaderboards } = await new Server(interaction.guildId!).sortBalances();
 
         const playersWithLevels = await Promise.all(
-            leaderboards.balances.map(async (userId) => {
+            leaderboards.balances.slice(0,10).map(async (userId) => {
                 const { balance } = await new User(userId).getGuildData(interaction.guildId!);
                 return { id: userId, balance: balance };
             })
         );
 
-        const leaderboardMessage = playersWithLevels.map((player, index) => `**${index + 1}. <@${player.id}> - ${CurrencySymbol}${Suffix(player.balance)}**`).join('\n');
+        const leaderboardMessage = playersWithLevels.map((player, index) => `**${index + 1}. <@${player.id}> - ${CurrencySymbol}${Suffix(player.balance)}** `).join('');
+
+        const userPlacement = leaderboards.balances.findIndex(userId => userId === interaction.user.id) + 1;
 
         const embed = EmbedGenerator.Info({
             title: 'Richest Players',
             description: leaderboardMessage,
+            footer: { text: `Your placement is #${userPlacement}` }
         });
 
         await interaction.reply({ embeds: [embed] });
