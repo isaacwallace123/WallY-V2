@@ -180,11 +180,11 @@ class BlackjackSession {
                 },
                 {
                     name: 'Dealer', 
-                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value} \`` : '\` ?? \`'}`,
+                    value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value > 21 ? "BUST" : this.dealer.value} \`` : '\` ?? \`'}`,
                 },
                 { 
                     name: 'You', 
-                    value: `${this.player.display(this.player.hand.length)} \` ${this.player.value} \``,
+                    value: `${this.player.display(this.player.hand.length)} \` ${this.player.value > 21 ? "BUST" : this.player.value} \``,
                 }
             ],
         });
@@ -287,7 +287,7 @@ class BlackjackCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        if (!interaction.guildId) return await interaction.reply('This command can only be used in a server');
+        if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
         const amount = interaction.options.getInteger('amount', true);
 

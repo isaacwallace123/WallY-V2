@@ -21,4 +21,7 @@ const CurrencySymbol = '<:Currency:1300204157306798181>';
 
 const WebsiteLink = "https://wall-y.ca/";
 
-export { ClientIntents, EmbedColor, WebsiteLink, Suffixes, CurrencySymbol }
+const getRandomXP = () => Math.floor(Math.random() * 5) + 1;
+const calculateLevelXP = (level: number) => 100 * level || 1;
+
+export { ClientIntents, EmbedColor, WebsiteLink, Suffixes, CurrencySymbol, getRandomXP, calculateLevelXP }

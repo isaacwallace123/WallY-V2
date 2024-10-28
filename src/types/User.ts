@@ -2,6 +2,7 @@ import { Document } from "mongoose";
 import { Guild, GuildInterface } from "./Guild";
 
 import UserModel from "../models/User.Schema";
+import { Server } from "./Server";
 
 interface UserInterface {
     id: string;
@@ -12,11 +13,11 @@ type UserDocument = Document & UserInterface;
 
 class User implements UserInterface {
     id: string;
-    guilds: Map<string, GuildInterface>;
+
+    guilds: Map<string, GuildInterface> = new Map<string, GuildInterface>();
 
     constructor(id: string) {
         this.id = id;
-        this.guilds = new Map<string, GuildInterface>();
     }
 
     async getUserData(): Promise<UserDocument> {
@@ -40,6 +41,8 @@ class User implements UserInterface {
         const userbase = await this.getUserData();
         const existingGuild = this.guilds.get(guildId);
 
+        await new Server(guildId).addUser(this);
+
         if (existingGuild) return new Guild(this, guildId, existingGuild);
 
         const newGuild: GuildInterface = {
@@ -57,4 +60,4 @@ class User implements UserInterface {
     }
 };
 
-export { UserInterface, User };
+export { UserInterface, User, UserDocument };

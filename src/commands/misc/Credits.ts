@@ -17,7 +17,7 @@ class CreditsCommand extends Command {
 
         const embed = EmbedGenerator.Info({
             title: "Credits",
-            description: `Programmer: <@!278326118430539786>\nImages: <@!1198313949930729522>`
+            description: `Programmer: isaacwallace123\nImages: Soggy`
         });
 
         return await interaction.editReply({ embeds: [embed] });

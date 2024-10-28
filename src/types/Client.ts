@@ -4,13 +4,11 @@ import { Command } from './Command';
 import { Signal } from './Signal';
 
 class Client extends DiscordClient {
-    public commands: Collection<string, Command>;
-    public signals: Signal[];
+    public commands: Collection<string, Command> = new Collection();
+    public signals: Signal[] = [];
 
     constructor(options: any) {
         super(options);
-        this.commands = new Collection();
-        this.signals = [];
     }
 
     AddCommand(command: Command) {

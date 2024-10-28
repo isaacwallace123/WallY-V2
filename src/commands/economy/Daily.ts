@@ -20,9 +20,9 @@ class DailyCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        await interaction.deferReply({ ephemeral: true });
+        if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
-        if (!interaction.guildId) return await interaction.editReply('This command can only be used in a server');
+        await interaction.deferReply({ ephemeral: true });
         
         const guild = await new User(interaction.user.id).getGuildData(interaction.guildId);
 

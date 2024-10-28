@@ -23,7 +23,7 @@ class BalanceCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        if (!interaction.guildId) return await interaction.reply('This command can only be used in a server');
+        if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
         const userOption = interaction.options.getUser("user", false);
 

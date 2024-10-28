@@ -65,6 +65,58 @@ class Guild implements GuildInterface {
 
         return await this.addBalance(-amount);
     }
+
+    async setLevel(level: number): Promise<Guild> {
+        this.level = level;
+
+        await UserModel.updateOne(
+            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
+            { $set: { [`guilds.${this.guildId}.level`]: this.level } }
+        );
+
+        return this;
+    }
+
+    async addLevel(level: number): Promise<Guild> {
+        this.level += level;
+
+        await UserModel.updateOne(
+            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
+            { $inc: { [`guilds.${this.guildId}.level`]: level } }
+        );
+
+        return this;
+    }
+
+    async removeLevel(level: number): Promise<Guild> {
+        return await this.addLevel(-level);
+    }
+
+    async setXp(xp: number): Promise<Guild> {
+        this.xp = xp;
+
+        await UserModel.updateOne(
+            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
+            { $set: { [`guilds.${this.guildId}.xp`]: this.xp } }
+        );
+
+        return this;
+    }
+
+    async addXp(xp: number): Promise<Guild> {
+        this.xp += xp;
+
+        await UserModel.updateOne(
+            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
+            { $inc: { [`guilds.${this.guildId}.xp`]: xp } }
+        );
+
+        return this;
+    }
+
+    async removeXp(xp: number): Promise<Guild> {
+        return await this.addLevel(-xp);
+    }
 }
 
 export { GuildInterface, Guild };

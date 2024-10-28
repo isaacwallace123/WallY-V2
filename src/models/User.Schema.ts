@@ -13,6 +13,7 @@ const userSchema = new Schema<User>({
     guilds: {
         type: Map,
         of: guildSchema,
+        default: {},
     }
 });
 

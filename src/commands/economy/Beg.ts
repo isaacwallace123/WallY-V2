@@ -21,7 +21,8 @@ interface Quote {
 const Quotes:Record<string, Quote[]> = {
     Nothing : [
         { title: "Too bad", description: "You don't deserve my cursed riches" },
-        { title: "What a shame", description: "My gold is buried deep, and you're not getting any" }
+        { title: "What a shame", description: "My gold is buried deep, and you're not getting any" },
+        { title: "Repulsive..", description: "Coins aren't for the damned like you" }
     ],
 
     Something: [
@@ -39,15 +40,15 @@ class BegCommand extends Command {
     constructor() {
         super({
             name: 'beg',
-            description: 'Beg for some money you peasant!',
+            description: 'Beg for some money you filthy peasant!',
             cooldown: 60,
         });
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        await interaction.deferReply({ ephemeral: true });
+        if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
-        if (!interaction.guildId) return await interaction.editReply('This command can only be used in a server');
+        await interaction.deferReply();
 
         let RandomValue = Math.random();
 
