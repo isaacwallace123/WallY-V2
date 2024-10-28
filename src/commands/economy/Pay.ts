@@ -34,7 +34,7 @@ class PayCommand extends Command {
 
         const user = interaction.options.getUser("user", true);
 
-        if(user.id === interaction.user.id) return await interaction.reply({ content: 'You cannot pay yourself!', ephemeral: true });
+        if(user.id === interaction.user.id || user.bot || user.system) return await interaction.reply({ content: 'You cannot pay that user!', ephemeral: true });
 
         const amount = interaction.options.getInteger("amount", true);
 

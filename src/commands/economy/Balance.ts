@@ -28,9 +28,9 @@ class BalanceCommand extends Command {
         if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
         const userOption = interaction.options.getUser("user", false);
-        const user = client.users.cache.find((user) => user.id === (userOption ? userOption.id : interaction.user.id));
+        const user = userOption ? userOption : interaction.user;
 
-        if (!user) return await interaction.reply({ content: 'User does not exist', ephemeral: true });
+        if (!user || user.bot || user.system) return await interaction.reply({ content: 'User does not exist', ephemeral: true });
 
         await interaction.deferReply({ ephemeral: true });
 
