@@ -4,7 +4,7 @@ import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 import { Suffix } from '../../utils/Suffix';
-import { CurrencySymbol } from '../../utils/Constants';
+import { Currencies } from '../../utils/Constants';
 import { Server } from '../../types/Server';
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
@@ -38,7 +38,9 @@ class LeaderboardCommand extends Command {
             })
         );
 
-        const leaderboardMessage = playersWithLevels.map((player, index) => `**${index + 1}. <@${player.id}> - Level ${player.level}** `).join('\n');
+        const leaderboardMessage = playersWithLevels.filter(userId => userId !== null)
+            .map((player, index) => `**${index + 1}. <@${player.id}> - Level ${player.level}** `)
+            .join('\n');
 
         const userPlacement = leaderboards.levels.findIndex(userId => userId === interaction.user.id) + 1;
 
@@ -61,7 +63,9 @@ class LeaderboardCommand extends Command {
             })
         );
 
-        const leaderboardMessage = playersWithLevels.map((player, index) => `**${index + 1}. <@${player.id}> - ${CurrencySymbol}${Suffix(player.balance)}** `).join('\n');
+        const leaderboardMessage = playersWithLevels.filter(userId => userId !== null)
+            .map((player, index) => `**${index + 1}. <@${player.id}> - ${Currencies.main}${Suffix(player.balance)}** `)
+            .join('\n');
 
         const userPlacement = leaderboards.balances.findIndex(userId => userId === interaction.user.id) + 1;
 

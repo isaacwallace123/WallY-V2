@@ -6,6 +6,7 @@ import { Server } from "./Server";
 
 interface UserInterface {
     id: string;
+    bank: Number;
     guilds: Map<string, GuildInterface>;
 }
 
@@ -13,6 +14,7 @@ type UserDocument = Document & UserInterface;
 
 class User implements UserInterface {
     id: string;
+    bank: number = 0;
 
     guilds: Map<string, GuildInterface> = new Map<string, GuildInterface>();
 
@@ -26,6 +28,7 @@ class User implements UserInterface {
         if (!userbase) {
             userbase = new UserModel({
                 id: this.id,
+                bank: this.bank,
                 guilds: new Map<string, GuildInterface>(),
             });
 
@@ -33,6 +36,7 @@ class User implements UserInterface {
         }
 
         this.guilds = userbase.guilds;
+        this.bank = userbase.bank;
 
         return userbase;
     }
@@ -47,6 +51,7 @@ class User implements UserInterface {
 
         const newGuild: GuildInterface = {
             balance: 1000,
+            crypto: 0,
             level: 1,
             xp: 0,
             daily: new Date(Date.now() - (24 * 60 * 60 * 1000)),
@@ -57,6 +62,26 @@ class User implements UserInterface {
         await userbase.save();
 
         return new Guild(this, guildId, newGuild);
+    }
+
+    async setBank(amount: number): Promise<User> {
+        this.bank = amount;
+
+        await UserModel.updateOne({ id: this.id },{ $set: { bank: this.bank } });
+
+        return this;
+    }
+
+    async addBank(amount: number): Promise<User> {
+        this.bank += amount;
+
+        await UserModel.updateOne({ id: this.id },{ $inc: { bank: amount } });
+
+        return this;
+    }
+
+    async removeBank(amount: number): Promise<User> {
+        return await this.addBank(-amount);
     }
 };
 

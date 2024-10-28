@@ -7,7 +7,7 @@ import { User } from '../../types/User';
 import { Guild } from '../../types/Guild';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
-import { WebsiteLink, CurrencySymbol } from '../../utils/Constants';
+import { WebsiteLink, Currencies } from '../../utils/Constants';
 import { Suffix } from '../../utils/Suffix';
 import { Card, Suits, Faces, UnknownCard } from '../../types/Card';
 
@@ -176,7 +176,7 @@ class BlackjackSession {
             fields: [
                 {
                     name: `${OutCome === GameOutcome.Ongoing ? "Stake" : `${OutCome === GameOutcome.Loss ? "Loss" : `${OutCome === GameOutcome.Win ? "Won" : "Kept"}`}`}`,
-                    value: `**${CurrencySymbol}${Suffix(this.stake)}**`,
+                    value: `**${Currencies.main}${Suffix(this.stake)}**`,
                 },
                 {
                     name: 'Dealer', 

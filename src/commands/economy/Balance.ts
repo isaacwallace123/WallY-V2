@@ -4,7 +4,8 @@ import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 import { Suffix } from '../../utils/Suffix';
-import { CurrencySymbol } from '../../utils/Constants';
+import { Currencies } from '../../utils/Constants';
+import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 class BalanceCommand extends Command {
     constructor() {
@@ -28,14 +29,22 @@ class BalanceCommand extends Command {
         const userOption = interaction.options.getUser("user", false);
 
         const userId = userOption ? userOption.id : interaction.user.id;
+        const user = client.users.cache.find((user) => user.id === userId);
+
+        if (!user) return await interaction.reply({ content: 'User does not exist', ephemeral: true });
 
         await interaction.deferReply({ ephemeral: true });
 
-        const guild = await new User(userId).getGuildData(interaction.guildId);
-        
-        const balance = guild?.balance || 0;
+        const UserModel = new User(userId);
 
-        await interaction.editReply(`<@${userId}>'s current balance is **${CurrencySymbol}${Suffix(balance)}**`);
+        const { bank } = await UserModel.getUserData();
+        const { balance, crypto } = await UserModel.getGuildData(interaction.guildId);
+
+        const embed = EmbedGenerator.default({
+            description: `${Currencies.main}${Suffix(balance)}\n${Currencies.crypto}${Suffix(crypto)}\n${Currencies.bank}${bank}`
+        }).withAuthor(user);
+
+        await interaction.editReply({ embeds: [embed] });
     }
 }
 

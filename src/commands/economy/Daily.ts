@@ -5,7 +5,7 @@ import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
 import { Suffix } from '../../utils/Suffix';
-import { CurrencySymbol } from '../../utils/Constants';
+import { Currencies } from '../../utils/Constants';
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 const RewardAmount = 1000;
@@ -36,7 +36,7 @@ class DailyCommand extends Command {
 
         await guild.setDaily();
 
-        await interaction.editReply(`Your new balance is **${CurrencySymbol}${Suffix(balance)}**`);
+        await interaction.editReply(`Your new balance is **${Currencies.main}${Suffix(balance)}**`);
     }
 }
 

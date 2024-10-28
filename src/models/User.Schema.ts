@@ -10,6 +10,11 @@ const userSchema = new Schema<User>({
         unique: true,
     },
 
+    bank: {
+        type: Number,
+        default: 0
+    },
+
     guilds: {
         type: Map,
         of: guildSchema,

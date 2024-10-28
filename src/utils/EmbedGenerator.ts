@@ -40,7 +40,9 @@ export class EmbedGenerator extends EmbedBuilder {
 
     public withAuthor(user: UserResolvable) {
         if (!this.client) return this;
+
         const author = this.client.users.resolve(user);
+        
         if (!author) return this;
 
         return this.setAuthor({

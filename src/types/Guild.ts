@@ -3,6 +3,7 @@ import { User } from "./User";
 
 interface GuildInterface {
     balance: number;
+    crypto: number,
     level: number;
     xp: number,
     daily: Date,
@@ -13,6 +14,7 @@ class Guild implements GuildInterface {
     guildId: string;
 
     balance: number;
+    crypto: number;
     level: number;
     xp: number;
     daily: Date;
@@ -22,6 +24,7 @@ class Guild implements GuildInterface {
         this.guildId = guildId;
 
         this.balance = guildData.balance;
+        this.crypto = guildData.crypto;
         this.level = guildData.level;
         this.xp = guildData.xp;
         this.daily = guildData.daily;
@@ -116,6 +119,34 @@ class Guild implements GuildInterface {
 
     async removeXp(xp: number): Promise<Guild> {
         return await this.addLevel(-xp);
+    }
+
+    async setCrypto(amount: number): Promise<Guild> {
+        this.crypto = amount;
+
+        await UserModel.updateOne(
+            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
+            { $set: { [`guilds.${this.guildId}.crypto`]: this.crypto } }
+        );
+
+        return this;
+    }
+
+    async addCrypto(amount: number): Promise<Guild> {
+        this.crypto += amount;
+
+        await UserModel.updateOne(
+            { id: this.user.id, [`guilds.${this.guildId}`]: { $exists: true } },
+            { $inc: { [`guilds.${this.guildId}.crypto`]: amount } }
+        );
+
+        return this;
+    }
+
+    async removeCrypto(amount: number): Promise<Guild> {
+        if(this.crypto < amount) throw new Error('Insufficient balance');
+
+        return await this.addCrypto(-amount);
     }
 }
 

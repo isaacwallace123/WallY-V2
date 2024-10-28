@@ -6,6 +6,10 @@ const guildSchema = new Schema<GuildInterface>({
         type: Number,
         default: 1000,
     },
+    crypto: {
+        type: Number,
+        default: 0
+    },
     level: {
         type: Number,
         default: 1,

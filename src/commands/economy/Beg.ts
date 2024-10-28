@@ -4,7 +4,7 @@ import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 import { Suffix } from '../../utils/Suffix';
-import { CurrencySymbol } from '../../utils/Constants';
+import { Currencies } from '../../utils/Constants';
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 const rewards = [
@@ -62,7 +62,7 @@ class BegCommand extends Command {
 
         const embed = (amount <= 0 ? EmbedGenerator.Error : EmbedGenerator.default)({
             title: UsedQuote.title,
-            description: `"${UsedQuote.description}${amount <= 0 ? "" : ` **${CurrencySymbol}${Suffix(amount)}**`}"`,
+            description: `"${UsedQuote.description}${amount <= 0 ? "" : ` **${Currencies.main}${Suffix(amount)}**`}"`,
             footer: { text: `${amount <= 0 ? "Imagine begging" : ""}` }
         });
 
