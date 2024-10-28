@@ -54,8 +54,8 @@ class PayCommand extends Command {
 
         const embed = EmbedGenerator.Success({
             title: 'Payment Successful',
-            description: `<@${interaction.user.id}> --> ${FormatBalance(amount)} --> <@${user.id}>`,
-            fields: [
+            description: `<@${interaction.user.id}> **-->** ${FormatBalance(amount)} **-->** <@${user.id}>`,
+            /*fields: [
                 {
                     name: `${interaction.user.username}`,
                     value: `${FormatBalance(UserBalance)}`,
@@ -66,7 +66,7 @@ class PayCommand extends Command {
                     value: `${FormatBalance(TargetBalance)}`,
                     inline: true,
                 },
-            ]
+            ]*/
         })
 
         return await interaction.editReply({ embeds: [embed] });
