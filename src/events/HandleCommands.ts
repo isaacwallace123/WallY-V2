@@ -3,6 +3,7 @@ import { Events, ChatInputCommandInteraction, Collection } from 'discord.js';
 import { Command } from '../types/Command';
 import { Signal } from '../types/Signal';
 import { Client } from '../types/Client';
+
 import { EmbedGenerator } from '../utils/EmbedGenerator';
 
 const CooldownTitles:string[] = [

@@ -1,8 +1,9 @@
 import { ApplicationCommandOptionType, GuildMember, type ChatInputCommandInteraction } from 'discord.js';
+import { useMainPlayer } from 'discord-player';
 
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
-import { useMainPlayer } from 'discord-player';
+
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 class PlayCommand extends Command {

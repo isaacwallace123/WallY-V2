@@ -1,11 +1,12 @@
 import client from './components/DiscordClient';
 
-import GetFiles from './utils/GetFiles';
 import path from 'path';
 import dotenv from 'dotenv';
 
 import { Command } from './types/Command';
 import { Signal } from './types/Signal';
+
+import GetFiles from './utils/GetFiles';
 
 import { ConnectDatabase, CloseDatabase } from './database/Connection';
 

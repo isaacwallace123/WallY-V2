@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from 'discord.js';
 
+import { Server } from '../../types/Server';
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
-import { Suffix } from '../../utils/Suffix';
-import { Currencies } from '../../utils/Constants';
-import { Server } from '../../types/Server';
+
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
+import { FormatBalance } from '../../utils/FormatCurrency';
 
 class LeaderboardCommand extends Command {
     constructor() {
@@ -64,7 +64,7 @@ class LeaderboardCommand extends Command {
         );
 
         const leaderboardMessage = playersWithLevels.filter(userId => userId !== null)
-            .map((player, index) => `**${index + 1}. <@${player.id}> - ${Currencies.main}${Suffix(player.balance)}** `)
+            .map((player, index) => `**${index + 1}. <@${player.id}> - ${FormatBalance(player.balance)}** `)
             .join('\n');
 
         const userPlacement = leaderboards.balances.findIndex(userId => userId === interaction.user.id) + 1;

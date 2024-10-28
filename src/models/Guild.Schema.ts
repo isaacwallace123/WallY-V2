@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+
 import { GuildInterface } from "../types/Guild";
 
 const guildSchema = new Schema<GuildInterface>({

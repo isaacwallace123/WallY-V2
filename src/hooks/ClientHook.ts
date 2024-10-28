@@ -1,4 +1,5 @@
 import type { Client } from 'discord.js';
+
 import { HooksRegistry, Symbols } from './Registry';
 
 const ClientHook = () => {

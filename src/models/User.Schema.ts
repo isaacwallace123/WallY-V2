@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+
 import { User } from "../types/User";
 
 import guildSchema from "./Guild.Schema";

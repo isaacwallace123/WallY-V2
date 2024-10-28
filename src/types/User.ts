@@ -6,7 +6,7 @@ import { Server } from "./Server";
 
 interface UserInterface {
     id: string;
-    bank: Number;
+    bank: number;
     guilds: Map<string, GuildInterface>;
 }
 

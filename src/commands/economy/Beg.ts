@@ -3,9 +3,9 @@ import type { ChatInputCommandInteraction, Collection } from 'discord.js';
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
-import { Suffix } from '../../utils/Suffix';
-import { Currencies } from '../../utils/Constants';
+
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
+import { FormatBalance } from '../../utils/FormatCurrency';
 
 const rewards = [
     { amount: 100, chance: 0.85 },
@@ -62,7 +62,7 @@ class BegCommand extends Command {
 
         const embed = (amount <= 0 ? EmbedGenerator.Error : EmbedGenerator.default)({
             title: UsedQuote.title,
-            description: `"${UsedQuote.description}${amount <= 0 ? "" : ` **${Currencies.main}${Suffix(amount)}**`}"`,
+            description: `"${UsedQuote.description}${amount <= 0 ? "" : ` **${FormatBalance(amount)}**`}"`,
             footer: { text: `${amount <= 0 ? "Imagine begging" : ""}` }
         });
 

@@ -1,7 +1,7 @@
 import { connect, connection } from "mongoose";
-import { HooksRegistry, Symbols } from "../hooks/Registry";
-
 import dotenv from 'dotenv';
+
+import { HooksRegistry, Symbols } from "../hooks/Registry";
 
 dotenv.config();
 

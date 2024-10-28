@@ -1,8 +1,9 @@
 import { GuildMember, type ChatInputCommandInteraction } from 'discord.js';
+import { useTimeline } from 'discord-player';
 
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
-import { useTimeline } from 'discord-player';
+
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 class ResumeCommand extends Command {

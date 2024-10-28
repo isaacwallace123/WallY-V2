@@ -1,5 +1,6 @@
-import { ClientIntents } from "../utils/Constants";
 import { Client } from "../types/Client";
+
+import { ClientIntents } from "../utils/Constants";
 
 import { HooksRegistry, Symbols } from "../hooks/Registry";
 

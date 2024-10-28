@@ -1,8 +1,9 @@
 import { GuildMember, type ChatInputCommandInteraction } from 'discord.js';
+import { useHistory } from 'discord-player';
 
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
-import { useHistory } from 'discord-player';
+
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 class PreviousCommand extends Command {

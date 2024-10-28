@@ -1,5 +1,4 @@
 import { Events, ChatInputCommandInteraction } from 'discord.js';
-
 import { GuildQueueEvent, Player } from 'discord-player';
 import { YoutubeiExtractor } from 'discord-player-youtubei';
 import { SoundCloudExtractor, SpotifyExtractor } from '@discord-player/extractor';

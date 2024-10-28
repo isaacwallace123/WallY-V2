@@ -2,6 +2,7 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
+
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 
 class CreditsCommand extends Command {

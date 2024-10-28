@@ -5,11 +5,11 @@ import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 import { Guild } from '../../types/Guild';
+import { Card, Suits, Faces, UnknownCard } from '../../types/Card';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
-import { WebsiteLink, Currencies } from '../../utils/Constants';
-import { Suffix } from '../../utils/Suffix';
-import { Card, Suits, Faces, UnknownCard } from '../../types/Card';
+import { WebsiteLink } from '../../utils/Constants';
+import { FormatBalance } from '../../utils/FormatCurrency';
 
 enum PlayerAction {
     Hit = 'hit',
@@ -176,7 +176,7 @@ class BlackjackSession {
             fields: [
                 {
                     name: `${OutCome === GameOutcome.Ongoing ? "Stake" : `${OutCome === GameOutcome.Loss ? "Loss" : `${OutCome === GameOutcome.Win ? "Won" : "Kept"}`}`}`,
-                    value: `**${Currencies.main}${Suffix(this.stake)}**`,
+                    value: `**${FormatBalance(this.stake)}**`,
                 },
                 {
                     name: 'Dealer', 

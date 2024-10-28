@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+
 import { Server } from "../types/Server";
 
 import UserModel from "./User.Schema";

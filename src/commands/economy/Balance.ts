@@ -3,9 +3,9 @@ import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from '
 import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
-import { Suffix } from '../../utils/Suffix';
-import { Currencies } from '../../utils/Constants';
+
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
+import { FormatBalance, FormatBank, FormatCrypto } from '../../utils/FormatCurrency';
 
 class BalanceCommand extends Command {
     constructor() {
@@ -41,7 +41,7 @@ class BalanceCommand extends Command {
         const { balance, crypto } = await UserModel.getGuildData(interaction.guildId);
 
         const embed = EmbedGenerator.default({
-            description: `${Currencies.main}${Suffix(balance)}\n${Currencies.crypto}${Suffix(crypto)}\n${Currencies.bank}${bank}`
+            description: `${FormatBalance(balance)}\n${FormatCrypto(crypto)}\n${FormatBank(bank)}`
         }).withAuthor(user);
 
         await interaction.editReply({ embeds: [embed] });

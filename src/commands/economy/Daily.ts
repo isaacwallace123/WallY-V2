@@ -4,9 +4,8 @@ import { Command } from '../../types/Command';
 import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
-import { Suffix } from '../../utils/Suffix';
-import { Currencies } from '../../utils/Constants';
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
+import { FormatBalance } from '../../utils/FormatCurrency';
 
 const RewardAmount = 1000;
 const DailyCooldown = 24 * 60 * 60 * 1000;
@@ -36,7 +35,7 @@ class DailyCommand extends Command {
 
         await guild.setDaily();
 
-        await interaction.editReply(`Your new balance is **${Currencies.main}${Suffix(balance)}**`);
+        await interaction.editReply(`Your new balance is **${FormatBalance(balance)}**`);
     }
 }
 
