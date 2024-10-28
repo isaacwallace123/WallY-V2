@@ -23,8 +23,6 @@ class LevelHandler extends Signal {
 
         const XPToGive = getRandomXP();
 
-        console.log(XPToGive);
-
         const CurrentXP = user.xp + XPToGive;
         const XPNeeded = calculateLevelXP(user.level);
 
