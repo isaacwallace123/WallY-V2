@@ -31,11 +31,14 @@ class DailyCommand extends Command {
             description: `You have already claimed your daily reward. Try again <t:${Math.floor(new Date(Timestamp + DailyCooldown).getTime() / 1000)}:R>`
         })]});
         
-        const { balance } = await guild.addBalance(RewardAmount);
-
+        await guild.addBalance(RewardAmount);
         await guild.setDaily();
 
-        await interaction.editReply(`Your new balance is **${FormatBalance(balance)}**`);
+        const embed = EmbedGenerator.default({
+            description: `Successfully claimed ${FormatBalance(RewardAmount)}`
+        });
+
+        await interaction.editReply({ embeds: [embed] });
     }
 }
 
