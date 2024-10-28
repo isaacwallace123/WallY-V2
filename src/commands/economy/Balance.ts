@@ -30,7 +30,7 @@ class BalanceCommand extends Command {
         const userOption = interaction.options.getUser("user", false);
         const user = userOption ? userOption : interaction.user;
 
-        if (!user || user.bot || user.system) return await interaction.reply({ content: 'User does not exist', ephemeral: true });
+        if (!user || user.bot || user.system) return await interaction.reply({ content: 'User data does not exist', ephemeral: true });
 
         await interaction.deferReply({ ephemeral: true });
 

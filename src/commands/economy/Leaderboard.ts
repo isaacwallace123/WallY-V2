@@ -38,15 +38,16 @@ class LeaderboardCommand extends Command {
             })
         );
 
-        const leaderboardMessage = playersWithLevels.filter(userId => userId !== null)
-            .map((player, index) => `**${index + 1}. <@${player.id}> - Level ${player.level}**`)
+        const leaderboardMessage = playersWithLevels
+            .filter(player => player.id !== null)
+            .map((player, index) => `${index + 1}. <@${player.id}> - Level ${player.level}`)
             .join('\n');
 
         const userPlacement = leaderboards.levels.findIndex(userId => userId === interaction.user.id) + 1;
 
         const embed = EmbedGenerator.Info({
             title: 'Most Experienced Users',
-            description: leaderboardMessage,
+            description: `\n${leaderboardMessage}`,
             footer: { text: `Your placement is #${userPlacement}` }
         });
 
@@ -63,15 +64,16 @@ class LeaderboardCommand extends Command {
             })
         );
 
-        const leaderboardMessage = playersWithLevels.filter(userId => userId !== null)
-            .map((player, index) => `**${index + 1}. <@${player.id}> - ${FormatBalance(player.balance)}**`)
+        const leaderboardMessage = playersWithLevels
+            .filter(userId => userId !== null)
+            .map((player, index) => `${index + 1}. <@${player.id}> - ${FormatBalance(player.balance)}`)
             .join('\n');
 
         const userPlacement = leaderboards.balances.findIndex(userId => userId === interaction.user.id) + 1;
 
         const embed = EmbedGenerator.Info({
             title: 'Richest Players',
-            description: leaderboardMessage,
+            description: `\n${leaderboardMessage}`,
             footer: { text: `Your placement is #${userPlacement}` }
         });
 
