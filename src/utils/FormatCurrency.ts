@@ -13,7 +13,7 @@ const FormatBalance = (amount: number) => `**${Currencies.balance} ${Suffix(amou
 
 const FormatCrypto = (amount: number) => `**${Currencies.crypto} ${Suffix(amount)}**`;
 
-const FormatShells = (amount: number) => `**${Currencies.shells}** ${Suffix(amount)}**`;
+const FormatShells = (amount: number) => `**${Currencies.shells} ${Suffix(amount)}**`;
 
 const FormatBank = (balance: number, level: number) => `**${Currencies.bank} ${Suffix(balance)} / ${Suffix(getMaxBalance(level))}**`;
 
