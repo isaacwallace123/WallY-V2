@@ -51,14 +51,7 @@ class BalanceCommand extends Command {
                 {
                     name: 'upgrade',
                     description: 'Upgrade your bank balance limit',
-                    type: ApplicationCommandOptionType.SubcommandGroup,
-                    options: [
-                        {
-                            name: 'buy',
-                            description: 'Buy upgrade to increase your bank balance limit',
-                            type: ApplicationCommandOptionType.Subcommand,
-                        },
-                    ]
+                    type: ApplicationCommandOptionType.Subcommand,
                 },
             ]
         });
@@ -168,23 +161,20 @@ class BalanceCommand extends Command {
 
         await interaction.deferReply({ ephemeral: true });
 
-        const subcommandGroup = interaction.options.getSubcommandGroup();
         const subcommand = interaction.options.getSubcommand();
 
-        if (subcommandGroup === 'upgrade') {
-            return await this.upgrade(interaction);
-        } else {
-            const amount = interaction.options.getInteger('amount', true);
+        if (subcommand === 'upgrade') return await this.upgrade(interaction);
 
-            if(amount <= 0) return await interaction.editReply({ embeds: [EmbedGenerator.default({
-                description: 'The amount must be a positive number greater than 0'
-            })]});
+        const amount = interaction.options.getInteger('amount', true);
 
-            if (subcommand === 'deposit') {
-                return await this.deposit(interaction, amount);
-            } else if (subcommand === 'withdraw') {
-                return await this.withdraw(interaction, amount);
-            }
+        if(amount <= 0) return await interaction.editReply({ embeds: [EmbedGenerator.default({
+            description: 'The amount must be a positive number greater than 0'
+        })]});
+
+        if (subcommand === 'deposit') {
+            return await this.deposit(interaction, amount);
+        } else if (subcommand === 'withdraw') {
+            return await this.withdraw(interaction, amount);
         }
     }
 }
