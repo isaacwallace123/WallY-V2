@@ -28,7 +28,7 @@ const ServerObject = {
     },
 }
 
-const ServerSchema = new Schema<Server>(ServerObject);
+const ServerSchema = new Schema<Server>(ServerObject, { _id: false, versionKey: 'versionkey' });
 
 const ServerModel = model<Server>('Server', ServerSchema);
 

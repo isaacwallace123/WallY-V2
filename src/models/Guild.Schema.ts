@@ -25,6 +25,6 @@ const GuildObject = {
     }
 }
 
-const GuildSchema = new Schema<GuildInterface>(GuildObject, { _id: false });
+const GuildSchema = new Schema<GuildInterface>(GuildObject, { _id: false, versionKey: false });
 
 export { GuildObject, GuildSchema };
