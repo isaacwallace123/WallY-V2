@@ -4,6 +4,8 @@ import { Routes } from 'discord-api-types/v9';
 import { Signal } from "../types/Signal";
 import { Client } from "../types/Client";
 
+const clientId: string = process.env.CLIENT_ID!;
+
 class InitializeApplicationCommands extends Signal {
     constructor() {
         super({
@@ -12,20 +14,39 @@ class InitializeApplicationCommands extends Signal {
         });
     }
 
-    async execute(client: Client) {
+    private async deleteCommands(client: Client) {
         const guilds = client.guilds.cache.map(guild => guild.id);
-        const clientId = process.env.CLIENT_ID;
 
-        if (!clientId) {
-            console.error('CLIENT_ID is not defined in the environment variables.');
-            return;
-        }
+        await client.rest.put(Routes.applicationCommands(clientId), { body: [] })
+            .then(() => console.log('Successfully deleted all global commands.'))
+            .catch(console.error);
 
-        for (const guildId of guilds) {
-            client.rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: client.GetRawCommands() })
-                .then(() => console.log('Successfully updated commands for guild ' + guildId))
+        for (const guildId of guilds) 
+            client.rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] })
+                .then(() => console.log('Successfully deleted all guild commands.'))
                 .catch(console.error);
-        }
+    }
+
+    async execute(client: Client) {
+        //await this.deleteCommands(client);
+
+        const globalCommands = client.GetRawGlobalCommands();
+
+        client.rest.put(Routes.applicationCommands(clientId), { body: globalCommands })
+            .then(() => console.log('Successfully updated global guild commands'))
+            .catch(console.error);
+
+        const guilds = client.guilds.cache.map(guild => guild.id);
+        const guildCommands = client.GetRawGuildCommands();
+
+        for (const guildId of guilds)
+            client.rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: guildCommands })
+                .then(() => console.log(`Successfully updated guild commands for ${guildId}`))
+                .catch(console.error);
+
+        /*client.rest.put(Routes.applicationCommands(clientId), { body: client.GetRawCommands() }) //This is to globalize all commands
+            .then(() => console.log('Successfully updated global guild commands'))
+            .catch(console.error);*/
     }
 }
 

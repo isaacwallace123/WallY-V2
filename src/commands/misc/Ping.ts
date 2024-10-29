@@ -8,6 +8,7 @@ class PingCommand extends Command {
         super({
             name: 'ping',
             description: 'pong!',
+            isGlobal: true,
         });
     }
 

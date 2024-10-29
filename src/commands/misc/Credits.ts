@@ -10,6 +10,7 @@ class CreditsCommand extends Command {
         super({
             name: 'credits',
             description: 'Know who spent the time to build the bot!',
+            isGlobal: true,
         });
     }
 

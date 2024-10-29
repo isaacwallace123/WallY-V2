@@ -27,11 +27,13 @@ class HandleCommands extends Signal {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        if (!interaction.isCommand() || !interaction.inCachedGuild()) return;
+        if (!interaction.isCommand()) return;
 
-        const command: Command | undefined = client.commands.get(interaction.commandName);
+        const command: Command | undefined = client.commands.list.get(interaction.commandName);
 
-        if (!command) return;
+        if (!command || (!interaction.inCachedGuild() && command.data.isGlobal === false)) return await interaction.reply({ embeds: [EmbedGenerator.default({
+            description: `This command can only be ran in a server`
+        })]});
 
         if (command.data.cooldown) {
             const now = Date.now();

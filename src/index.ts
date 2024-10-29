@@ -20,6 +20,9 @@ const main = async () => {
     
         const CommandInstance: Command = new CommandClass();
     
+        if (CommandInstance.data.isGlobal === true) client.AddGlobalCommand(CommandInstance);
+        else client.AddGuildCommand(CommandInstance);
+
         client.AddCommand(CommandInstance);
     }
 

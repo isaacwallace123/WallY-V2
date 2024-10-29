@@ -3,6 +3,7 @@ import { ChatInputCommandInteraction, Client } from 'discord.js';
 
 interface ExtraCommandData {
     cooldown?: number;
+    isGlobal?: boolean;
 }
 
 type CommandType = CommandData & ExtraCommandData;
