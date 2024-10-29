@@ -21,6 +21,5 @@ const getRandomXP = ():number => Math.floor(Math.random() * 5) + 1;
 const calculateLevelXP = (level: number):number => 100 * level || 1;
 
 const getMaxBalance = (level: number):number => 5000 * level;
-const getUpgradePrice = (level: number):number => level <= 3 ? 5000 : 1000 * Math.pow(2, level - 1);
 
-export { ClientIntents, EmbedColor, WebsiteLink, getRandomXP, calculateLevelXP, getMaxBalance, getUpgradePrice }
+export { ClientIntents, EmbedColor, WebsiteLink, getRandomXP, calculateLevelXP, getMaxBalance }

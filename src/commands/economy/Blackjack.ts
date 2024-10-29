@@ -196,9 +196,9 @@ class BlackjackSession {
         if (OutCome === GameOutcome.Win) {
             this.stake += Math.ceil(this.blackjack ? this.stake * 0.5 : 0);
 
-            await this.userdata.addBalance(this.stake);
+            await this.userdata.addBalance(this.stake).catch(() => this.GiveRewards());
         } else if (OutCome === GameOutcome.Loss) {
-            await this.userdata.removeBalance(this.stake);
+            await this.userdata.removeBalance(this.stake).catch(() => this.GiveRewards());
         }
     }
 

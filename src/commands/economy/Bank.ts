@@ -6,8 +6,7 @@ import { User } from '../../types/User';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
 import { FormatBalance, FormatBank, FormatBankWithoutLimit } from '../../utils/FormatCurrency';
-import { getMaxBalance, getUpgradePrice } from '../../utils/Constants';
-import { Suffix } from '../../utils/Suffix';
+import { getMaxBalance } from '../../utils/Constants';
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 
 enum UpgradeActions {
@@ -63,14 +62,14 @@ class BalanceCommand extends Command {
         const UserData = await UserObject.getUserData();
         const GuilData = await UserObject.getGuildData(interaction.guildId!);
         
-        const UpgradePrice = getUpgradePrice(UserData.bank.level);
+        const UpgradePriceAndBalance = getMaxBalance(UserData.bank.level + 1);
 
         const message = await interaction.editReply({ embeds: [EmbedGenerator.Info({
             title: 'Upgrade Panel',
-            description: `\n**Price:** ${FormatBalance(getUpgradePrice(UserData.bank.level))}\n**Bank Limit:** ${FormatBankWithoutLimit(getMaxBalance(UserData.bank.level + 1))}\n\nWould you still like to proceed?`
+            description: `\n**Price:** ${FormatBalance(UpgradePriceAndBalance)}\n**Bank Limit:** ${FormatBankWithoutLimit(UpgradePriceAndBalance)}\n\nWould you still like to proceed?`
         })], components: [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId(UpgradeActions.Confirm).setLabel('Confirm').setStyle(ButtonStyle.Success).setDisabled(GuilData.balance < UpgradePrice),
+                new ButtonBuilder().setCustomId(UpgradeActions.Confirm).setLabel('Confirm').setStyle(ButtonStyle.Success).setDisabled(GuilData.balance < UpgradePriceAndBalance),
                 new ButtonBuilder().setCustomId(UpgradeActions.Cancel).setLabel('Cancel').setStyle(ButtonStyle.Danger),
             )
         ]});
@@ -81,7 +80,7 @@ class BalanceCommand extends Command {
             if (response.customId === UpgradeActions.Confirm) {
                 const { bank } = await UserData.upgradeBank();
 
-                await GuilData.removeBalance(UpgradePrice);
+                await GuilData.removeBalance(UpgradePriceAndBalance);
 
                 const embed = EmbedGenerator.Success({
                     title: 'Successfully Upgraded',
@@ -117,12 +116,12 @@ class BalanceCommand extends Command {
         const GuilData = await UserObject.getGuildData(interaction.guildId!);
 
         const { balance } = await GuilData.addBalance(amount);
-        const { bank } = await UserData.removeBank(amount);
+        await UserData.removeBank(amount);
 
         await UserData.setBankCooldown();
 
         const embed = EmbedGenerator.Success({
-            description: `${FormatBank(amount, bank.level)} --> ${FormatBalance(balance)}`
+            description: `-${FormatBankWithoutLimit(amount)} --> +${FormatBalance(balance)}`
         });
 
         return await interaction.editReply({ embeds: [embed] })
@@ -147,7 +146,7 @@ class BalanceCommand extends Command {
         await GuildData.removeBalance(amount);
 
         const embed = EmbedGenerator.Success({
-            description: `${FormatBalance(amount)} --> ${FormatBank(bank.balance, bank.level)}`
+            description: `-${FormatBalance(amount)} --> +${FormatBankWithoutLimit(bank.balance)}`
         });
 
         return await interaction.editReply({ embeds: [embed] });
