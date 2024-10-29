@@ -65,19 +65,15 @@ class BalanceCommand extends Command {
         
         const UpgradePrice = getUpgradePrice(UserData.bank.level);
 
-        if (GuilData.balance < UpgradePrice) return await interaction.editReply({ embeds: [EmbedGenerator.default({
-            description: `You do not have enough money to buy an upgrade`
-        })]});
-
         const message = await interaction.editReply({ embeds: [EmbedGenerator.Info({
             title: 'Upgrade Panel',
             description: `\n**Price:** ${FormatBalance(getUpgradePrice(UserData.bank.level))}\n**Bank Limit:** ${FormatBankWithoutLimit(getMaxBalance(UserData.bank.level))}\n\nWould you still like to proceed?`
         })], components: [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId(UpgradeActions.Confirm).setLabel('Confirm').setStyle(ButtonStyle.Success),
+                new ButtonBuilder().setCustomId(UpgradeActions.Confirm).setLabel('Confirm').setStyle(ButtonStyle.Success).setDisabled(GuilData.balance < UpgradePrice),
                 new ButtonBuilder().setCustomId(UpgradeActions.Cancel).setLabel('Cancel').setStyle(ButtonStyle.Danger),
             )
-        ]})
+        ]});
 
         const collector = message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 });
 
