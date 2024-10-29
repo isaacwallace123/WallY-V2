@@ -89,7 +89,7 @@ class BalanceCommand extends Command {
 
                 const embed = EmbedGenerator.Success({
                     title: 'Successfully Upgraded',
-                    description: `\n**New Bank limit:** ${FormatBalance(getMaxBalance(bank.level))}`
+                    description: `\n**New Bank limit:** ${FormatBankWithoutLimit(getMaxBalance(bank.level))}`
                 });
 
                 return await interaction.editReply({ embeds: [embed], components: [] });
