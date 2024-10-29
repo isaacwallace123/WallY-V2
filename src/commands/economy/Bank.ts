@@ -5,7 +5,7 @@ import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
-import { FormatBalance, FormatBank } from '../../utils/FormatCurrency';
+import { FormatBalance, FormatBank, FormatBankWithoutLimit } from '../../utils/FormatCurrency';
 import { getMaxBalance, getUpgradePrice } from '../../utils/Constants';
 import { Suffix } from '../../utils/Suffix';
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
@@ -71,7 +71,7 @@ class BalanceCommand extends Command {
 
         const message = await interaction.editReply({ embeds: [EmbedGenerator.Info({
             title: 'Upgrade Panel',
-            description: `\n**Price:** ${FormatBalance(getUpgradePrice(UserData.bank.level))}\nBank Limit: ${getMaxBalance(UserData.bank.level)}\n\nWould you still like to proceed?`
+            description: `\n**Price:** ${FormatBalance(getUpgradePrice(UserData.bank.level))}\n**Bank Limit:** ${FormatBankWithoutLimit(getMaxBalance(UserData.bank.level))}\n\nWould you still like to proceed?`
         })], components: [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId(UpgradeActions.Confirm).setLabel('Confirm').setStyle(ButtonStyle.Success),

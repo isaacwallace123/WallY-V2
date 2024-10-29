@@ -14,4 +14,6 @@ const FormatCrypto = (amount: number) => `**${Currencies.crypto} ${Suffix(amount
 
 const FormatBank = (balance: number, level: number) => `**${Currencies.bank} ${Suffix(balance)} / ${Suffix(getMaxBalance(level))}**`;
 
-export { Currencies, FormatBalance, FormatCrypto, FormatBank };
+const FormatBankWithoutLimit = (balance: number) => `**${Currencies.bank} ${Suffix(balance)}**`;
+
+export { Currencies, FormatBalance, FormatCrypto, FormatBank, FormatBankWithoutLimit };
