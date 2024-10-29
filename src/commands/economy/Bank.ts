@@ -154,6 +154,7 @@ class BalanceCommand extends Command {
         })]});
 
         const { bank } = await UserData.addBank(amount);
+        await GuildData.removeBalance(amount);
 
         const embed = EmbedGenerator.Success({
             description: `${FormatBalance(amount)} --> ${FormatBank(bank.balance, bank.level)}`
