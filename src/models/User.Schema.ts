@@ -33,7 +33,7 @@ const UserObject = {
     }
 }
 
-const UserSchema = new Schema<User>(UserObject, { versionKey: 'versionkey' });
+const UserSchema = new Schema<User>(UserObject, { versionKey: false });
 
 const UserModel = model<User>('User', UserSchema);
 
