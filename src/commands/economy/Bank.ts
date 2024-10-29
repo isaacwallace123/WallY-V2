@@ -67,7 +67,7 @@ class BalanceCommand extends Command {
 
         const message = await interaction.editReply({ embeds: [EmbedGenerator.Info({
             title: 'Upgrade Panel',
-            description: `\n**Price:** ${FormatBalance(getUpgradePrice(UserData.bank.level))}\n**Bank Limit:** ${FormatBankWithoutLimit(getMaxBalance(UserData.bank.level))}\n\nWould you still like to proceed?`
+            description: `\n**Price:** ${FormatBalance(getUpgradePrice(UserData.bank.level))}\n**Bank Limit:** ${FormatBankWithoutLimit(getMaxBalance(UserData.bank.level + 1))}\n\nWould you still like to proceed?`
         })], components: [
             new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder().setCustomId(UpgradeActions.Confirm).setLabel('Confirm').setStyle(ButtonStyle.Success).setDisabled(GuilData.balance < UpgradePrice),
