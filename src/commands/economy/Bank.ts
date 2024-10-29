@@ -88,7 +88,8 @@ class BalanceCommand extends Command {
                 await GuilData.removeBalance(UpgradePrice);
 
                 const embed = EmbedGenerator.Success({
-                    description: `\nSuccessfully upgraded bank limit\n\nNew Limit: **${FormatBalance(getMaxBalance(bank.level))}**`
+                    title: 'Successfully Upgraded',
+                    description: `\n**New Bank limit:** ${FormatBalance(getMaxBalance(bank.level))}`
                 });
 
                 return await interaction.editReply({ embeds: [embed], components: [] });
