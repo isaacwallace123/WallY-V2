@@ -43,7 +43,7 @@ class BalanceCommand extends Command {
         const userPlacement = leaderboards.balances.findIndex(userId => userId === user.id) + 1;
 
         const embed = EmbedGenerator.default({
-            description: `${FormatBalance(balance)}\n${FormatBank(bank.balance, bank.level)}\n\n${FormatCrypto(crypto)}`,
+            description: `${FormatBalance(balance)}\n${FormatBank(bank.balance, bank.level)}\n${FormatCrypto(crypto)}`,
             footer: { text: `Server Rank: #${userPlacement}` }
         }).withAuthor(user);
 
