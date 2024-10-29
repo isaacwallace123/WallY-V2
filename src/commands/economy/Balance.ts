@@ -5,7 +5,7 @@ import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
-import { FormatBalance, FormatBank, FormatCrypto } from '../../utils/FormatCurrency';
+import { FormatBalance, FormatBank, FormatCrypto, FormatShells } from '../../utils/FormatCurrency';
 import { Server } from '../../types/Server';
 
 class BalanceCommand extends Command {
@@ -36,14 +36,14 @@ class BalanceCommand extends Command {
 
         const UserModel = new User(user.id);
 
-        const { bank } = await UserModel.getUserData();
-        const { balance, crypto } = await UserModel.getGuildData(interaction.guildId);
+        const { bank, crypto } = await UserModel.getUserData();
+        const { balance } = await UserModel.getGuildData(interaction.guildId);
         const { leaderboards } = await new Server(interaction.guildId).sortBalances();
 
         const userPlacement = leaderboards.balances.findIndex(userId => userId === user.id) + 1;
 
         const embed = EmbedGenerator.default({
-            description: `${FormatBalance(balance)}\n${FormatBank(bank.balance, bank.level)}\n${FormatCrypto(crypto)}`,
+            description: `${FormatBalance(balance)}\n${FormatBank(bank.balance, bank.level)}\n\n${FormatCrypto(crypto.balance)}\n${FormatShells(crypto.shells)}`,
             footer: { text: `Server Rank: #${userPlacement}` }
         }).withAuthor(user);
 

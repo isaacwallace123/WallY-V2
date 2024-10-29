@@ -26,6 +26,21 @@ const UserObject = {
         },
     },
 
+    crypto: {
+        balance: {
+            type: Number,
+            default: 0
+        },
+        shells: {
+            type: Number,
+            default: 0
+        },
+        last: {
+            type: Date,
+            default: new Date(Date.now() - (24 * 60 * 60 * 1000))
+        },
+    },
+
     guilds: {
         type: Map,
         of: GuildSchema,

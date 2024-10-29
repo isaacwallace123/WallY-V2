@@ -12,9 +12,16 @@ interface BankInterface {
     last: Date;
 }
 
+interface CryptoInterface {
+    balance: number;
+    shells: number;
+    last: Date;
+}
+
 interface UserInterface {
     id: string;
     bank: BankInterface;
+    crypto: CryptoInterface;
     guilds: Map<string, GuildInterface>;
 }
 
@@ -27,6 +34,12 @@ class User implements UserInterface {
         balance: UserObject.bank.balance.default,
         level: UserObject.bank.level.default,
         last: UserObject.bank.last.default,
+    };
+
+    crypto: CryptoInterface = {
+        balance: UserObject.crypto.balance.default,
+        shells: UserObject.crypto.shells.default,
+        last: UserObject.crypto.last.default,
     };
 
     guilds: Map<string, GuildInterface> = new Map<string, GuildInterface>();
@@ -42,17 +55,20 @@ class User implements UserInterface {
             userbase = new UserModel({
                 id: this.id,
                 bank: this.bank,
+                crypto: this.crypto,
                 guilds: new Map<string, GuildInterface>(),
             });
 
             await userbase.save();
         } else {
             userbase.bank ??= this.bank;
+            userbase.crypto ??= this.crypto;
             userbase.guilds ??= new Map<string, GuildInterface>();
         }
 
-        this.guilds = userbase.guilds;
         this.bank = userbase.bank;
+        this.crypto = userbase.crypto;
+        this.guilds = userbase.guilds;
 
         return userbase;
     }
@@ -73,7 +89,6 @@ class User implements UserInterface {
         if (!guildData) {
             guildData = {
                 balance: GuildObject.balance.default,
-                crypto: GuildObject.crypto.default,
                 level: GuildObject.level.default,
                 xp: GuildObject.xp.default,
                 daily: GuildObject.daily.default,
@@ -84,7 +99,6 @@ class User implements UserInterface {
             await userbase.save();
         } else {
             guildData.balance ??= GuildObject.balance.default;
-            guildData.crypto ??= GuildObject.crypto.default;
             guildData.level ??= GuildObject.level.default;
             guildData.xp ??= GuildObject.xp.default;
             guildData.daily ??= GuildObject.daily.default;
@@ -127,6 +141,42 @@ class User implements UserInterface {
 
     async removeBank(amount: number): Promise<User> {
         return await this.addBank(-amount);
+    }
+
+    async setMineCooldown(): Promise<User> {
+        this.crypto.last = new Date();
+
+        await UserModel.updateOne({ id: this.id },{ $set: { "crypto.last": this.crypto.last } });
+
+        return this;
+    }
+
+    async addShell(): Promise<User> {
+        this.crypto.shells++;
+
+        await UserModel.updateOne({ id: this.id }, { $inc: { "crypto.shells": 1 } });
+
+        return this;
+    }
+
+    async setCrypto(amount: number): Promise<User> {
+        this.crypto.balance = amount;
+
+        await UserModel.updateOne({ id: this.id },{ $set: { "crypto.balance": amount } });
+
+        return this;
+    }
+
+    async addCrypto(amount: number): Promise<User> {
+        this.crypto.balance += amount;
+
+        await UserModel.updateOne({ id: this.id },{ $inc: { "crypto.balance": amount } });
+
+        return this;
+    }
+
+    async removeCrypto(amount: number): Promise<User> {
+        return await this.addCrypto(-amount);
     }
 };
 
