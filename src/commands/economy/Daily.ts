@@ -8,7 +8,6 @@ import { EmbedGenerator } from '../../utils/EmbedGenerator';
 import { FormatBalance } from '../../utils/FormatCurrency';
 
 const RewardAmount = 1000;
-const DailyCooldown = 24 * 60 * 60 * 1000;
 
 class DailyCommand extends Command {
     constructor() {
@@ -27,8 +26,8 @@ class DailyCommand extends Command {
 
         const Timestamp = guild.daily ? new Date(guild.daily).getTime() : 0;
 
-        if (Date.now() - Timestamp < DailyCooldown) return await interaction.editReply({ embeds: [EmbedGenerator.default({
-            description: `You have already claimed your daily reward. Try again <t:${Math.floor(new Date(Timestamp + DailyCooldown).getTime() / 1000)}:R>`
+        if (Date.now() - Timestamp < 86400000) return await interaction.editReply({ embeds: [EmbedGenerator.default({
+            description: `You have already claimed your daily reward. Try again <t:${Math.floor(new Date(Timestamp + 86400000).getTime() / 1000)}:R>`
         })]});
         
         await guild.addBalance(RewardAmount);

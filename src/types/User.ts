@@ -9,6 +9,7 @@ import { Guild, GuildInterface } from "./Guild";
 interface BankInterface {
     balance: number;
     level: number;
+    last: Date;
 }
 
 interface UserInterface {
@@ -17,7 +18,7 @@ interface UserInterface {
     guilds: Map<string, GuildInterface>;
 }
 
-type UserDocument = Document & UserInterface;
+type UserDocument = Document & User;
 
 class User implements UserInterface {
     id: string;
@@ -25,6 +26,7 @@ class User implements UserInterface {
     bank: BankInterface = {
         balance: UserObject.bank.balance.default,
         level: UserObject.bank.level.default,
+        last: UserObject.bank.last.default,
     };
 
     guilds: Map<string, GuildInterface> = new Map<string, GuildInterface>();
@@ -33,7 +35,7 @@ class User implements UserInterface {
         this.id = id;
     }
 
-    async getUserData(): Promise<UserDocument> {
+    private async getUserbase(): Promise<UserDocument> {
         let userbase = await UserModel.findOne({ id: this.id });
 
         if (!userbase) {
@@ -44,6 +46,9 @@ class User implements UserInterface {
             });
 
             await userbase.save();
+        } else {
+            userbase.bank ??= this.bank;
+            userbase.guilds ??= new Map<string, GuildInterface>();
         }
 
         this.guilds = userbase.guilds;
@@ -52,34 +57,54 @@ class User implements UserInterface {
         return userbase;
     }
 
+    async getUserData(): Promise<User> {
+        await this.getUserbase();
+
+        return this;
+    }
+
     async getGuildData(guildId: string): Promise<Guild> {
-        const userbase = await this.getUserData();
-        const existingGuild = this.guilds.get(guildId);
+        const userbase = await this.getUserbase();
 
         await new Server(guildId).addUser(this);
 
-        if (existingGuild) return new Guild(this, guildId, existingGuild);
+        let guildData = this.guilds.get(guildId);
 
-        const newGuild: GuildInterface = {
-            balance: GuildObject.balance.default,
-            crypto: GuildObject.crypto.default,
-            level: GuildObject.level.default,
-            xp: GuildObject.xp.default,
+        if (!guildData) {
+            guildData = {
+                balance: GuildObject.balance.default,
+                crypto: GuildObject.crypto.default,
+                level: GuildObject.level.default,
+                xp: GuildObject.xp.default,
+                daily: GuildObject.daily.default,
+            };
+    
+            this.guilds.set(guildId, guildData);
+    
+            await userbase.save();
+        } else {
+            guildData.balance ??= GuildObject.balance.default;
+            guildData.crypto ??= GuildObject.crypto.default;
+            guildData.level ??= GuildObject.level.default;
+            guildData.xp ??= GuildObject.xp.default;
+            guildData.daily ??= GuildObject.daily.default;
+        }
 
-            daily: new Date(Date.now() - (24 * 60 * 60 * 1000)),
-        };
+        return new Guild(this, guildId, guildData);
+    }
 
-        this.guilds.set(guildId, newGuild);
+    async setBankCooldown(): Promise<User> {
+        this.bank.last = new Date();
 
-        await userbase.save();
+        await UserModel.updateOne({ id: this.id },{ $set: { "bank.last": this.bank.last } });
 
-        return new Guild(this, guildId, newGuild);
+        return this;
     }
 
     async upgradeBank(): Promise<User> {
         this.bank.level++;
 
-        await UserModel.updateOne({ id: this.id }, { $set: { "bank.level": 1 } });
+        await UserModel.updateOne({ id: this.id }, { $inc: { "bank.level": 1 } });
 
         return this;
     }

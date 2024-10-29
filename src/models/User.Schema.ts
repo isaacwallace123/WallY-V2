@@ -20,6 +20,10 @@ const UserObject = {
             type: Number,
             default: 1
         },
+        last: {
+            type: Date,
+            default: new Date(Date.now() - (24 * 60 * 60 * 1000))
+        },
     },
 
     guilds: {

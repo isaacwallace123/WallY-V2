@@ -20,5 +20,6 @@ const WebsiteLink = "https://wall-y.ca/";
 const getRandomXP = () => Math.floor(Math.random() * 5) + 1;
 const calculateLevelXP = (level: number) => 100 * level || 1;
 const getMaxBalance = (level: number) => 5000 * level;
+const getUpgradePrice = (level: number) => 5000 * level;
 
-export { ClientIntents, EmbedColor, WebsiteLink, getRandomXP, calculateLevelXP, getMaxBalance }
+export { ClientIntents, EmbedColor, WebsiteLink, getRandomXP, calculateLevelXP, getMaxBalance, getUpgradePrice }

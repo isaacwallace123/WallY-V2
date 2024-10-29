@@ -15,7 +15,7 @@ interface ServerInterface {
     leaderboards: Leaderboards;
 }
 
-type ServerDocument = Document & ServerInterface;
+type ServerDocument = Document & Server;
 
 class Server implements ServerInterface {
     id: string;
