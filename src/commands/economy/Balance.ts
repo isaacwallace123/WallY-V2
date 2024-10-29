@@ -13,6 +13,7 @@ class BalanceCommand extends Command {
         super({
             name: 'balance',
             description: 'Check your user balance.',
+            isGlobal: true,
             options: [
                 {
                     name: 'user',
@@ -25,8 +26,6 @@ class BalanceCommand extends Command {
     }
 
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
-        if (!interaction.guildId) return await interaction.reply({ content: 'This command can only be used in a server', ephemeral: true });
-
         const userOption = interaction.options.getUser("user", false);
         const user = userOption ? userOption : interaction.user;
 
@@ -37,15 +36,25 @@ class BalanceCommand extends Command {
         const UserModel = new User(user.id);
 
         const { bank, crypto } = await UserModel.getUserData();
-        const { balance } = await UserModel.getGuildData(interaction.guildId);
-        const { leaderboards } = await new Server(interaction.guildId).sortBalances();
 
-        const userPlacement = leaderboards.balances.findIndex(userId => userId === user.id) + 1;
+        let embedDescription = '';
 
-        const embed = EmbedGenerator.default({
-            description: `${FormatBalance(balance)}\n${FormatBank(bank.balance, bank.level)}\n${FormatCrypto(crypto.balance)}\n${FormatShells(crypto.shells)}`,
-            footer: { text: `Server Rank: #${userPlacement}` }
-        }).withAuthor(user);
+        const embed = EmbedGenerator.default({}).withAuthor(user);
+
+        if (interaction.inCachedGuild()) {
+            const { balance } = await UserModel.getGuildData(interaction.guildId);
+            const { leaderboards } = await new Server(interaction.guildId).sortBalances();
+            
+            const userPlacement = leaderboards.balances.findIndex(userId => userId === user.id) + 1;
+
+            embed.setFooter({ text: `Server Rank: #${userPlacement}` });
+
+            embedDescription += `\n${FormatBalance(balance)}`;
+        }
+
+        embedDescription += `\n${FormatBank(bank.balance, bank.level)}\n${FormatCrypto(crypto.balance)}\n${FormatShells(crypto.shells)}`;
+
+        embed.setDescription(embedDescription);
 
         await interaction.editReply({ embeds: [embed] });
     }
