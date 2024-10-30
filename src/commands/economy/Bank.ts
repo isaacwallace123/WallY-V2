@@ -5,7 +5,7 @@ import { Client } from '../../types/Client';
 import { User } from '../../types/User';
 
 import { EmbedGenerator } from '../../utils/EmbedGenerator';
-import { FormatBalance, FormatBank, FormatBankWithoutLimit } from '../../utils/FormatCurrency';
+import { FormatBalance, FormatBankWithoutLimit } from '../../utils/FormatCurrency';
 import { getMaxBalance } from '../../utils/Constants';
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 

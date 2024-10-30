@@ -11,6 +11,8 @@ import { EmbedGenerator } from '../../utils/EmbedGenerator';
 import { WebsiteLink } from '../../utils/Constants';
 import { FormatBalance } from '../../utils/FormatCurrency';
 
+const TimeLimit = 60000;
+
 enum PlayerAction {
     Hit = 'hit',
     Stand = 'stand',
@@ -119,7 +121,7 @@ class BlackjackSession {
     private player: BlackjackPlayer;
     private dealer: BlackjackPlayer;
 
-    private collector: any;
+    private collector?: InteractionCollector<ButtonInteraction>;
 
     private blackjack: boolean;
 
@@ -140,7 +142,9 @@ class BlackjackSession {
     }
 
     private GetOutcome(): GameOutcome {
-        if (!this.IsFinished) {
+        if (this.blackjack) {
+            return GameOutcome.Win;
+        } else if (!this.IsFinished) {
             return GameOutcome.Ongoing;
         } else if (this.player.value > 21) {
             return GameOutcome.Loss;
@@ -177,7 +181,13 @@ class BlackjackSession {
                 {
                     name: `${OutCome === GameOutcome.Ongoing ? "Stake" : `${OutCome === GameOutcome.Loss ? "Loss" : `${OutCome === GameOutcome.Win ? "Won" : "Kept"}`}`}`,
                     value: `**${FormatBalance(this.stake)}**`,
+                    inline: true,
                 },
+                ...(OutCome === GameOutcome.Ongoing ? [{
+                    name: 'Time',
+                    value: `<t:${Math.floor(new Date(Date.now() + TimeLimit).getTime() / 1000)}:R>`,
+                    inline: true,
+                }] : []),
                 {
                     name: 'Dealer', 
                     value: `${this.dealer.display(this.IsFinished ? this.dealer.hand.length : 1)} ${this.IsFinished ? `\` ${this.dealer.value > 21 ? "BUST" : this.dealer.value} \`` : '\` ?? \`'}`,
@@ -219,6 +229,7 @@ class BlackjackSession {
         if (response.user.id !== response.message.interactionMetadata!.user.id) return response.reply({ content: "This is not your game!", ephemeral: true });
 
         this.DoubleDownEnabled = false;
+        this.collector!.resetTimer();
 
         if (response.customId === PlayerAction.Hit) {
             this.player.hit();
@@ -235,7 +246,7 @@ class BlackjackSession {
         }
         
         if (this.IsFinished) {
-            this.collector.stop();
+            this.collector!.stop();
 
             await this.EndSession();
         }
@@ -256,7 +267,7 @@ class BlackjackSession {
 
         const message = await this.interaction.editReply({ embeds: [this.DisplayMatch()], components: [this.CreateActionRow()] });
 
-        this.collector = message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 60000 });
+        this.collector = message.createMessageComponentCollector({ componentType: ComponentType.Button, time: TimeLimit });
 
         this.collector.on('collect', async (response: ButtonInteraction) => await this.HandleAction(response));
 
