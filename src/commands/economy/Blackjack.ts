@@ -184,7 +184,7 @@ class BlackjackSession {
                     inline: true,
                 },
                 ...(OutCome === GameOutcome.Ongoing ? [{
-                    name: 'Time',
+                    name: 'Ends',
                     value: `<t:${Math.floor(new Date(Date.now() + TimeLimit).getTime() / 1000)}:R>`,
                     inline: true,
                 }] : []),
