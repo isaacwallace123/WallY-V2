@@ -47,7 +47,7 @@ class PlayCommand extends Command {
                 description: `No results found for \`${query}\``
             });
     
-            return interaction.reply({ ephemeral: true, embeds: [embed] });
+            return interaction.editReply({ embeds: [embed] });
         }
 
         try {

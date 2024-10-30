@@ -61,7 +61,7 @@ class HandleCommands extends Signal {
             await command.execute(client, interaction);
         } catch (error) {
             console.error(error);
-            await interaction.reply({ content: "There was an error executing this command", ephemeral: true });
+            await interaction.deleteReply();
         }
     }
 }
