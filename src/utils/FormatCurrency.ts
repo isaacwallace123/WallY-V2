@@ -3,9 +3,9 @@ import { Suffix } from "./Suffix";
 import { getMaxBalance } from "./Constants";
 
 const Currencies = {
-    balance: '<:Currency:1300204157306798181>',
-    crypto: '<:bitcoin:1300519754972397629>',
-    shells: `<:terminal:1300894673153560657>`,
+    balance: '<:currency:1364986029022384209>',
+    crypto: '<:crypto:1364986000610300157>',
+    shells: `<:terminal:1364986213378953398>`,
     bank: '<:bank:1300519780578758808>',
 };
 
